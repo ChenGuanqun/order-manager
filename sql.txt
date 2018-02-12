@@ -1,0 +1,44 @@
+ CREATE TABLE `customer` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `CustomerName` varchar(200) NOT NULL,
+  `Creator`	varchar(256) COMMENT '创建者',
+ `InsertTime`	bigint COMMENT '创建时间',
+ `LastOperator`	varchar(256) COMMENT '最后操作人',
+ `LastModifyTime`	bigint	COMMENT '最后操作时间',
+ `Description`	varchar(256) COMMENT '备注',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户信息表'
+
+
+ CREATE TABLE `user` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `UserName` varchar(64) NOT NULL,
+  `Password` varchar(64) NOT NULL,
+  `Creator`	varchar(256) COMMENT '创建者',
+  `Status` int Comment '账户状态 1可以 2禁用',
+  `SecurityRole` int Comment '权限管理配置',
+ `InsertTime`	bigint COMMENT '创建时间',
+ `LastOperator`	varchar(256) COMMENT '最后操作人',
+ `LastModifyTime`	bigint	COMMENT '最后操作时间',
+ `Description`	varchar(256) COMMENT '备注',
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IDX_UserName` (`UserName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表'
+
+ CREATE TABLE `order` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `ProductId` bigint(20) NOT NULL comment '产品id',
+  `ProductName` varchar(200) NOT NULL comment '产品名称',
+  `ProductSeries` varchar(200) NOT NULL comment '产品型号',
+  `Number` bigint(20) NOT NULL comment '产品数量',
+  `DeliveryDate` bigint(20) comment '交货日期',
+  `OrderDate` bigint(20) comment '下单日期',
+  `PlanDate` bigint(20) comment '计划日期',
+  `Status` int not null comment '订单状态',
+  `Creator`	varchar(256) COMMENT '创建者',
+ `InsertTime`	bigint COMMENT '创建时间',
+ `LastOperator`	varchar(256) COMMENT '最后操作人',
+ `LastModifyTime`	bigint	COMMENT '最后操作时间',
+ `Description`	varchar(2048) COMMENT '备注（产品要求订单要求）',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单信息表'
