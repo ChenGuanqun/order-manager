@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order.manager.dao.order.OrderInfoMapper">
+
+    <sql id="OrderInfo_allFields">
+        Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, Creator, InsertTime, LastOperator, LastModifyTime, Description
+    </sql>
+
+    <insert id="insert" parameterType="OrderInfo">
+     INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, Creator, InsertTime, LastOperator, LastModifyTime, Description)
+        VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description})
+    </insert>
+
+    <update id="updateById" parameterType="OrderInfo">
+        UPDATE order_info SET
+
+        <if test="productId != null and productId > 0">
+            ProductId = #{productId},
+        </if>
+
+        <if test="productName != null and productName != ''">
+            productName = #{productName},
+        </if>
+
+        <if test="productSeries != null and productSeries != ''">
+            ProductSeries = #{productSeries},
+        </if>
+
+        <if test="number != null and number > 0">
+            Number = #{number},
+        </if>
+
+        <if test="deliveryDate != null and deliveryDate >= 0">
+            DeliveryDate = #{deliveryDate},
+        </if>
+
+        <if test="orderDate != null and orderDate >= 0">
+            OrderDate = #{orderDate},
+        </if>
+
+        <if test="planDate != null and planDate >= 0">
+            PlanDate = #{planDate},
+        </if>
+
+        <if test="status != null and status > 0">
+            Status = #{status},
+        </if>
+
+        <if test="lastOperator != null">
+            LastOperator = #{lastOperator},
+        </if>
+
+        <if test="description != null">
+            Description = #{description},
+        </if>
+
+        LastModifyTime = #{lastModifyTime}
+        WHERE Id = #{id}
+    </update>
+
+    <select id="getById" parameterType="Long" resultType="OrderInfo">
+        SELECT
+        <include refid="OrderInfo_allFields"/>
+        FROM order_info
+        <where>
+            Id = #{id}
+        </where>
+    </select>
+
+    <sql id="OrderInfo_query_condition">
+        <where>
+            <if test="status != null and status > 0">
+                AND Status = #{status},
+            </if>
+            <if test="creator != null and creator != ''">
+                AND Creator = #{creator},
+            </if>
+
+        </where>
+    </sql>
+
+
+    <select id="queryCount" parameterType="OrderInfoQuery" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM order_info
+        <include refid="OrderInfo_query_condition"></include>
+    </select>
+
+    <select id="queryList" parameterType="OrderInfoQuery" resultType="OrderInfo">
+        SELECT
+        <include refid="OrderInfo_allFields"/>
+        FROM order_info
+        <include refid="OrderInfo_query_condition"></include>
+        ORDER BY LastModifyTime DESC
+        <if test="limit > -1">
+            LIMIT #{limit}
+        </if>
+        <if test="offset > -1">
+            OFFSET #{offset}
+        </if>
+    </select>
+</mapper>
