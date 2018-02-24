@@ -1,7 +1,7 @@
 'use strict'
 require('./check-versions')()
-
-process.env.NODE_ENV = 'production'
+const args = process.argv.slice(2)
+process.env.NODE_ENV = !args[0] ? 'production' : 'development'
 
 const ora = require('ora')
 const rm = require('rimraf')
@@ -9,7 +9,7 @@ const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
-const webpackConfig = require('./webpack.prod.conf')
+const webpackConfig = process.env.NODE_ENV === 'production' ? require('./webpack.prod.conf') : require('./webpack.dev.noserver.config')
 
 const spinner = ora('building for production...')
 spinner.start()

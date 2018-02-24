@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import './styles/base.css'
+Vue.use(Element, { size: 'medium' })
 Vue.config.productionTip = false
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
