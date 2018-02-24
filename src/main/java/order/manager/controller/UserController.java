@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
@@ -17,5 +19,11 @@ public class UserController {
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
         return "index.html";
+    }
+
+
+    @RequestMapping(value = {"/static/**"})
+    public String js(HttpServletRequest request) {
+        return request.getServletPath();
     }
 }
