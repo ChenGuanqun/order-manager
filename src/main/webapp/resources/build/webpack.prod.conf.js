@@ -14,12 +14,12 @@ const env = require('../config/prod.env')
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
+      // sourceMap: config.build.productionSourceMap,
       extract: true,
-      usePostCSS: true
+      // usePostCSS: true
     })
   },
-  devtool: config.build.devtool,
+  // devtool: config.build.devtool,
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
