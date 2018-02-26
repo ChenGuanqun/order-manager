@@ -31,13 +31,21 @@
 </template>
 
 <script>
+  import request from '@/api/users'
   export default {
     name: "users",
-      data() {
-          return {
-              tableData: []
-          }
-      }
+    data() {
+        return {
+            tableData: []
+        }
+    },
+    created() {
+      request.getXXXData().then(res => {
+        this.tableData = res.xxxx
+      }).catch(err => {
+        // 处理请求错误的情况
+      })
+    }
   }
 </script>
 
