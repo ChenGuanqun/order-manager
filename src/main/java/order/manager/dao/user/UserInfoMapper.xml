@@ -46,6 +46,10 @@
         </where>
     </select>
 
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM user WHERE Id = #{id}
+    </delete>
+
     <sql id="UserInfo_query_condition">
         <where>
             <if test="userName !=null and userName != ''">

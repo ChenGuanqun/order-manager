@@ -48,26 +48,29 @@
         <el-table-column
                 prop="description"
                 label="产品要求"
-                width="500">
+                width="400">
         </el-table-column>
 
         <el-table-column
                 prop="properties"
                 label="配件一览"
-                width="193">
+                width="293">
             <template slot-scope="scope">
                 <el-checkbox-group v-model="checkList">
                     <el-checkbox :label="scope.row.id.toString()+(1)">油漆</el-checkbox>
                     <el-checkbox :label="scope.row.id.toString()+(2)">定子</el-checkbox>
-                    <br>
-                    <el-checkbox :label="scope.row.id.toString()+(3)">转子</el-checkbox>
+                    <el-checkbox :label="scope.row.id.toString()+(3)">转子</el-checkbox><br>
                     <el-checkbox :label="scope.row.id.toString()+(4)">风罩</el-checkbox>
-                    <br>
                     <el-checkbox :label="scope.row.id.toString()+(5)">钢板件</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(6)">轴</el-checkbox>
-                    <br>
+                    <el-checkbox :label="scope.row.id.toString()+(6)">轴</el-checkbox><br>
                     <el-checkbox :label="scope.row.id.toString()+(7)">盖头</el-checkbox>
                     <el-checkbox :label="scope.row.id.toString()+(8)">机壳</el-checkbox>
+                    <el-checkbox :label="scope.row.id.toString()+(9)">转子总成</el-checkbox><br>
+                    <el-checkbox :label="scope.row.id.toString()+(10)">定子总成</el-checkbox>
+                    <el-checkbox :label="scope.row.id.toString()+(11)">包装</el-checkbox>
+                    <el-checkbox :label="scope.row.id.toString()+(12)">标牌</el-checkbox><br>
+                    <el-checkbox :label="scope.row.id.toString()+(13)">开关</el-checkbox>
+                    <el-checkbox :label="scope.row.id.toString()+(14)">线缆</el-checkbox>
                 </el-checkbox-group>
             </template>
         </el-table-column>

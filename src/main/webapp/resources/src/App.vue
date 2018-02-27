@@ -2,23 +2,20 @@
     <el-container class="wrapper">
         <el-header class="header" height="80px">
             任务管理系统
-            <!--<el-row>-->
-                <!--<el-col :span="23"><div class="grid-content bg-purple"></div>任务管理系统</el-col>-->
-                <!--<el-col :span="1">-->
-                    <!--<el-dropdown trigger="click">-->
-                        <!--<a href="javascript:;" class="el-dropdown-link"  style="color:white">点击退出</a>-->
-                        <!--<el-dropdown-menu slot="dropdown">-->
-                            <!--<a href="/logout">-->
-                                <!--<el-dropdown-item>退出</el-dropdown-item>-->
-                            <!--</a>-->
-                        <!--</el-dropdown-menu>-->
-                    <!--</el-dropdown>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
 
+            <el-dropdown size="medium" class="el-dropdown-logout">
+                  <span class="el-dropdown-link">
+                    欢迎,{{currentUserName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <a href="/logout">
+                                <el-dropdown-item>退出</el-dropdown-item>
+                            </a>
+                        </el-dropdown-menu>
+            </el-dropdown>
         </el-header>
         <el-container :style="{height: '100%'}">
-            <el-aside  width="140px">
+            <el-aside width="140px">
                 <el-menu default-active="1" background-color="#324157" text-color="#fff">
                     <router-link to="/progress">
                         <el-menu-item index="1">订单进度</el-menu-item>
@@ -38,41 +35,71 @@
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+    import request from '@/api/users';
+    export default {
+        name: 'App',
+        data(){
+            return {
+                currentUserName:'xxx'
+            }
+        },
+        created() {
+            request.getCurrentUserName().then(res => {
+                if(res.data.code == 200) {
+                    this.currentUserName = res.data.result
+                }
+            }).catch(err => {
+                // 处理请求错误的情况
+            })
+        }
+    }
 </script>
 
 <style>
-  .header {
-      position: relative;
-      padding: 0 15px;
-      box-sizing: border-box;
-      width: 100%;
-      height: 80px;
-      font-size: 20px;
-      line-height: 80px;
-      color: #fff;
-      background-color: #242f42;
-  }
-  .wrapper {
-    height: 100%;
-  }
-  .menu {
-    height: 100%;
-  }
+    .header {
+        position: relative;
+        padding: 0 15px;
+        box-sizing: border-box;
+        width: 100%;
+        height: 80px;
+        font-size: 20px;
+        line-height: 80px;
+        color: #fff;
+        background-color: #242f42;
+        position:relative;
+    }
 
-  .hd_name {
-      display: inline-block;
-  }
+    .wrapper {
+        height: 100%;
+    }
 
-  .hd_operate {
-      float: right;
-      margin-right: 40px;
-      font-size: 14px;
-  }
+    .menu {
+        height: 100%;
+    }
 
-  .content {
-    padding: 20px;
-  }
+    .hd_name {
+        display: inline-block;
+    }
+
+    .hd_operate {
+        float: right;
+        margin-right: 40px;
+        font-size: 14px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #fff;
+        font-size: 16px;
+
+    }
+    .el-icon-arrow-down {
+        font-size: 16px;
+    }
+    .el-dropdown-logout{
+        float: right;
+    }
 </style>

@@ -48,10 +48,17 @@ public class UserApi extends AbstractApi{
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> deleteUser(Long id) throws ServiceException {
+    public ApiResponse<Boolean> deleteUser(@RequestBody UserInfo userInfo) throws ServiceException {
+        Long id = userInfo.getId();
         Validate.isTrue(id != null && id > 0, "id不合法");
         boolean ret = userInfoService.deleteById(id);
         return new ApiResponse<>(ret);
+    }
+    @RequestMapping(value = "/queryCurrentUserName", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<String> getCurrentUserName() throws ServiceException {
+        String username = getOperatorFromContext();
+        return new ApiResponse<>(username);
     }
 
 

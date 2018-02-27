@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static order.manager.constant.OrderConstants.USER_STATUS_DISABLED;
+import static order.manager.constant.OrderConstants.USER_STATUS_ENABLE;
+
 /**
  * Created by tachen on 2018/2/11.
  */
@@ -44,6 +47,9 @@ public class OrderUserService implements UserDetailsService{
         }
 
         UserInfo user = list.get(0);
+        if(user.getStatus() == USER_STATUS_DISABLED) {
+            throw new UsernameNotFoundException("user not found:" + username);
+        }
 
         Role role = new Role();
         role.setUsername("chentao");

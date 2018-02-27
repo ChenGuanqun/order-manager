@@ -57,6 +57,23 @@
                     prop="description"
                     label="备注">
             </el-table-column>
+            <el-table-column
+                    label="启用">
+                <template slot-scope="scope">
+                    <el-switch
+                            v-model="scope.row.status"
+                            :inactive-value="2"
+                            :active-value="1"
+                            @change="statusChange(scope.row)"></el-switch>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
+                    <el-button @click="handleDelete(scope.row)" type="text" size="mini">删除</el-button>
+                </template>
+            </el-table-column>
         </el-table>
         <!--</el-row>-->
         <!--</el-container>-->
@@ -93,12 +110,15 @@
             dateFormatter(row, col, value) {
                 return util.dateHandle(value);
             },
-            onSubmit() {
-                request.queryUsers(this.formInline).then(res => {
+            fetchAllUsers(params) {
+                request.queryUsers(params).then(res => {
                     this.tableData = res.data.result.data
                 }).catch(err => {
                     // 处理请求错误的情况
                 })
+            },
+            onSubmit() {
+                this.fetchAllUsers(this.formInline);
             },
             closeDialog() {
                 this.dialogFormVisible = false;
@@ -111,12 +131,15 @@
             doOperate() {
                 this.dialogFormVisible = false;
                 request.createUser(this.form).then(res => {
-                    console.info(res);
-                }).catch(err => {
-                    // 处理请求错误的情况
-                })
-                request.queryUsers({}).then(res => {
-                    this.tableData = res.data.result.data
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '创建用户成功!',
+                            type: 'success'
+                        });
+                        this.fetchAllUsers({});
+                    } else {
+                        this.$message.error('创建用户失败!');
+                    }
                 }).catch(err => {
                     // 处理请求错误的情况
                 })
@@ -124,6 +147,44 @@
                     uerName: '',
                     description: ''
                 }
+            },
+            handleEdit(row) {
+//                console.log(row);
+            },
+            handleDelete(row) {
+                request.deleteUser(row).then(res => {
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '删除用户:"' + row.userName+ '"成功!',
+                            type: 'success'
+                        });
+                        this.fetchAllUsers({});
+                    } else {
+                        this.$message.error('删除用户:"' + row.userName+ '"失败!');
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
+
+            },
+            statusChange(row) {
+                request.updateUser({status:row.status,id:row.id}).then(res => {
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '用户状态更新成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('用户状态更新失败!');
+                        if(row.status == 1) {
+                            row.status = 2;
+                        } else if (row.status == 2){
+                            row.status = 1;
+                        }
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
             }
         }
     }

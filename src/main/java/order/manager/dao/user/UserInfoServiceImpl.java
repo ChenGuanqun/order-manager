@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static order.manager.constant.OrderConstants.USER_STATUS_ENABLE;
+
 /**
  * @author chentao01
  * @version 2018/2/12
@@ -27,7 +29,7 @@ public class UserInfoServiceImpl implements UserInfoService{
     public boolean insert(UserInfo userInfo, String operator) throws ServiceException {
         Validate.notEmpty(userInfo.getUserName(), "用户名为空");
         userInfo.setPassword(bCryptPasswordEncoder.encode("123456"));
-        userInfo.setStatus(1);
+        userInfo.setStatus(USER_STATUS_ENABLE);
         userInfo.setCreator(operator);
         userInfo.setLastOperator(operator);
         userInfo.setLastModifyTime(System.currentTimeMillis());

@@ -13,5 +13,23 @@ export default {
             userName: params.userName,
             description: params.description
         })
+    },
+
+    deleteUser(params) {
+        return ajax.post('/api/user/delete', {
+            id: params.id
+        })
+    },
+
+    updateUser(params) {
+        return ajax.post('/api/user/update', {
+            id: params.id,
+            status: params.status,
+            description: params.description
+        })
+    },
+
+    getCurrentUserName() {
+        return ajax.post('/api/user/queryCurrentUserName')
     }
 }
