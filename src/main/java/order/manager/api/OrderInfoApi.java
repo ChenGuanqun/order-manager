@@ -14,6 +14,7 @@ import order.manager.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +36,7 @@ public class OrderInfoApi extends AbstractApi{
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> createUser(OrderInfo orderInfo) throws ServiceException {
+    public ApiResponse<Boolean> createUser(@RequestBody OrderInfo orderInfo) throws ServiceException {
         boolean ret = orderInfoService.insert(orderInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
@@ -43,7 +44,7 @@ public class OrderInfoApi extends AbstractApi{
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> updateUser(OrderInfo orderInfo) throws ServiceException {
+    public ApiResponse<Boolean> updateUser(@RequestBody OrderInfo orderInfo) throws ServiceException {
         boolean ret = orderInfoService.updateById(orderInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
@@ -59,7 +60,7 @@ public class OrderInfoApi extends AbstractApi{
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<DataListResult<OrderInfo>> queryUser(OrderInfoQuery query) throws ServiceException {
+    public ApiResponse<DataListResult<OrderInfo>> queryUser(@RequestBody OrderInfoQuery query) throws ServiceException {
 
         DataListResult<OrderInfo> result = new DataListResult<>();
         result.setCount((long) orderInfoService.queryCount(query));

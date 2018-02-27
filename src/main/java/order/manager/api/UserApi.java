@@ -33,7 +33,7 @@ public class UserApi extends AbstractApi{
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> createUser(UserInfo userInfo) throws ServiceException {
+    public ApiResponse<Boolean> createUser(@RequestBody UserInfo userInfo) throws ServiceException {
         boolean ret = userInfoService.insert(userInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
@@ -41,7 +41,7 @@ public class UserApi extends AbstractApi{
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> updateUser(UserInfo userInfo) throws ServiceException {
+    public ApiResponse<Boolean> updateUser(@RequestBody  UserInfo userInfo) throws ServiceException {
         boolean ret = userInfoService.updateById(userInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
@@ -57,7 +57,7 @@ public class UserApi extends AbstractApi{
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<DataListResult<UserInfo>> queryUser(UserInfoQuery query) throws ServiceException {
+    public ApiResponse<DataListResult<UserInfo>> queryUser(@RequestBody UserInfoQuery query) throws ServiceException {
 
         DataListResult<UserInfo> result = new DataListResult<>();
         result.setCount((long) userInfoService.queryCount(query));

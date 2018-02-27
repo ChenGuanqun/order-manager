@@ -2,9 +2,16 @@
 import ajax from './index'
 
 export default {
-  getXXXData(params) {
-    return ajax.post('/api/user/query', {
-      params: params
-    })
-  }
+    queryUsers(params) {
+        return ajax.post('/api/user/query', {
+            userName: params.userName
+        })
+    },
+
+    createUser(params) {
+        return ajax.post('/api/user/create', {
+            userName: params.userName,
+            description: params.description
+        })
+    }
 }

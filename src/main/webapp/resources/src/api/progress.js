@@ -2,8 +2,8 @@
 import ajax from './index'
 
 export default {
-  getXXXData(params) {
-    return ajax.post('/api/user/query', {
+  queryOrder(params) {
+    return ajax.post('/api/order/query', {
       params: params
     })
   }

@@ -20,7 +20,7 @@
         <el-container :style="{height: '100%'}">
             <el-aside  width="140px">
                 <el-menu default-active="1" background-color="#324157" text-color="#fff">
-                    <router-link to="/page1">
+                    <router-link to="/progress">
                         <el-menu-item index="1">订单进度</el-menu-item>
                     </router-link>
                     <router-link to="/users">
