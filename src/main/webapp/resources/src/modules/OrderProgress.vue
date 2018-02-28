@@ -56,21 +56,21 @@
                 label="配件一览"
                 width="293">
             <template slot-scope="scope">
-                <el-checkbox-group v-model="checkList">
-                    <el-checkbox :label="scope.row.id.toString()+(1)">油漆</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(2)">定子</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(3)">转子</el-checkbox><br>
-                    <el-checkbox :label="scope.row.id.toString()+(4)">风罩</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(5)">钢板件</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(6)">轴</el-checkbox><br>
-                    <el-checkbox :label="scope.row.id.toString()+(7)">盖头</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(8)">机壳</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(9)">转子总成</el-checkbox><br>
-                    <el-checkbox :label="scope.row.id.toString()+(10)">定子总成</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(11)">包装</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(12)">标牌</el-checkbox><br>
-                    <el-checkbox :label="scope.row.id.toString()+(13)">开关</el-checkbox>
-                    <el-checkbox :label="scope.row.id.toString()+(14)">线缆</el-checkbox>
+                <el-checkbox-group v-model="scope.row.configArray" @change="configChange(scope.row)">
+                    <el-checkbox label="油漆"></el-checkbox>
+                    <el-checkbox label="定子"></el-checkbox>
+                    <el-checkbox label="转子"></el-checkbox><br>
+                    <el-checkbox label="风罩"></el-checkbox>
+                    <el-checkbox label="钢板件"></el-checkbox>
+                    <el-checkbox label="轴"></el-checkbox><br>
+                    <el-checkbox label="盖头"></el-checkbox>
+                    <el-checkbox label="机壳"></el-checkbox>
+                    <el-checkbox label="转子总成"></el-checkbox><br>
+                    <el-checkbox label="定子总成"></el-checkbox>
+                    <el-checkbox label="包装"></el-checkbox>
+                    <el-checkbox label="标牌"></el-checkbox><br>
+                    <el-checkbox label="开关"></el-checkbox>
+                    <el-checkbox label="线缆"></el-checkbox>
                 </el-checkbox-group>
             </template>
         </el-table-column>
@@ -82,7 +82,9 @@
                         v-model="scope.row.status"
                         :active-value="2"
                         :inactive-value="1"
-                        :width='40'></el-switch>
+                        :width='40'
+                        @change="statusChange(scope.row)">
+                </el-switch>
             </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -95,10 +97,10 @@
 </template>
 
 <script>
-    import orderRequest from '@/api/progress';
+    import request from '@/api/progress';
     import util from '@/shares/util';
     export default {
-        name: "progress",
+        name: "orderProgress",
         data() {
             return {
                 tableData: [],
@@ -106,7 +108,7 @@
             }
         },
         created() {
-            orderRequest.queryOrder({}).then(res => {
+            request.queryOrder({}).then(res => {
                 this.tableData = res.data.result.data
             }).catch(err => {
                 // 处理请求错误的情况
@@ -121,6 +123,39 @@
             },
             handleDelete(row) {
                 console.log(row);
+            },
+            statusChange(row) {
+                request.updateOrder({status:row.status,id:row.id}).then(res => {
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '订单状态更新成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('订单状态更新失败!');
+                        if(row.status == 1) {
+                            row.status = 2;
+                        } else if (row.status == 2){
+                            row.status = 1;
+                        }
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
+            },
+            configChange(row) {
+                request.updateOrder({configArray:row.configArray,id:row.id}).then(res => {
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '配件状态更新成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('配件状态更新失败!');
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
             }
         }
     }

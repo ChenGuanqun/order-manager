@@ -7,6 +7,8 @@ import order.manager.constant.RetureCode;
 import order.manager.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @Log4j2
 public abstract class AbstractApi {
 
+    protected static final Mapper DOZER_BEAN_MAPPER = new DozerBeanMapper();
 
     protected String getOperatorFromContext() {
         SecurityContext context = SecurityContextHolder.getContext();

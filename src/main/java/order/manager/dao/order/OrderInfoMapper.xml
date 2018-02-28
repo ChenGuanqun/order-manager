@@ -3,16 +3,27 @@
 <mapper namespace="order.manager.dao.order.OrderInfoMapper">
 
     <sql id="OrderInfo_allFields">
-        Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, Creator, InsertTime, LastOperator, LastModifyTime, Description
+        Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
+         Creator, InsertTime, LastOperator, LastModifyTime, Description
     </sql>
 
     <insert id="insert" parameterType="OrderInfo">
-     INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, Creator, InsertTime, LastOperator, LastModifyTime, Description)
-        VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description})
+     INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
+     Creator, InsertTime, LastOperator, LastModifyTime, Description)
+        VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description})
     </insert>
 
     <update id="updateById" parameterType="OrderInfo">
         UPDATE order_info SET
+
+        <if test="customerName != null and customerName != ''">
+            CustomerName = #{customerName},
+        </if>
+
+        <if test="config != null and config != ''">
+            Config = #{config},
+        </if>
 
         <if test="productId != null and productId > 0">
             ProductId = #{productId},

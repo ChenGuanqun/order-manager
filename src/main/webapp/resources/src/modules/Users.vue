@@ -8,15 +8,21 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
-                <el-button type="primary" @click="dialogFormVisible = true">创建用户</el-button>
+                <el-button type="primary" @click="handleCreate">创建用户</el-button>
             </el-form-item>
         </el-form>
         <!--</el-row>-->
 
-        <el-dialog title="创建用户" :visible.sync="dialogFormVisible" width='400px'>
+        <el-dialog title="操作用户" :visible.sync="dialogFormVisible" width='400px'>
             <el-form :model="form">
                 <el-form-item label="姓名" label-width='80px'>
-                    <el-input v-model="form.userName" auto-complete="off"></el-input>
+                    <el-input v-model="form.userName" auto-complete="off" :disabled="isEdit"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="权限" label-width='80px'>
+                    <el-input v-model="form.securityRole" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
 
@@ -71,6 +77,7 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
+                    <el-button @click="handleResetKey(scope.row)" type="text" size="mini">密码重置</el-button>
                     <el-button @click="handleDelete(scope.row)" type="text" size="mini">删除</el-button>
                 </template>
             </el-table-column>
@@ -95,8 +102,11 @@
                 dialogFormVisible: false,
                 form: {
                     userName: '',
-                    description: ''
-                }
+                    description: '',
+                    //todo 用户权限
+                    securityRole:0
+                },
+                isEdit: false
             };
         },
         created() {
@@ -123,33 +133,59 @@
             closeDialog() {
                 this.dialogFormVisible = false;
                 this.form = {
-                    uerName: '',
+                    userName: '',
                     description: ''
                 }
             },
 
-            doOperate() {
-                this.dialogFormVisible = false;
-                request.createUser(this.form).then(res => {
-                    if(res.data.code == 200 && res.data.result){
-                        this.$message({
-                            message: '创建用户成功!',
-                            type: 'success'
-                        });
-                        this.fetchAllUsers({});
-                    } else {
-                        this.$message.error('创建用户失败!');
-                    }
-                }).catch(err => {
-                    // 处理请求错误的情况
-                })
+            handleCreate(){
                 this.form = {
                     uerName: '',
                     description: ''
                 }
+                this.dialogFormVisible = true;
+                this.isEdit = false;
+            },
+            doOperate() {
+                this.dialogFormVisible = false;
+                if(!this.isEdit){
+                    //创建用户
+                    request.createUser(this.form).then(res => {
+                        if(res.data.code == 200 && res.data.result){
+                            this.$message({
+                                message: '创建用户成功!',
+                                type: 'success'
+                            });
+                            this.fetchAllUsers({});
+                        } else {
+                            this.$message.error('创建用户失败!');
+                        }
+                    }).catch(err => {
+                        // 处理请求错误的情况
+                    })
+                }else {
+                    //编辑用户
+                    request.updateUser({id:this.$_currentEditUser.id, description:this.form.description}).then(res => {
+                        if(res.data.code == 200 && res.data.result){
+                            this.$message({
+                                message: '用户信息更新成功!',
+                                type: 'success'
+                            });
+                            this.fetchAllUsers({});
+                        } else {
+                            this.$message.error('用户信息更新失败!');
+                        }
+                    }).catch(err => {
+                        // 处理请求错误的情况
+                    })
+                }
             },
             handleEdit(row) {
-//                console.log(row);
+                this.$_currentEditUser = row;
+                this.form.userName = this.$_currentEditUser.userName;
+                this.form.description = this.$_currentEditUser.description;
+                this.dialogFormVisible = true ;
+                this.isEdit = true;
             },
             handleDelete(row) {
                 request.deleteUser(row).then(res => {
@@ -166,6 +202,10 @@
                     // 处理请求错误的情况
                 })
 
+            },
+            handleResetKey(row) {
+                //todo
+                console.info(row)
             },
             statusChange(row) {
                 request.updateUser({status:row.status,id:row.id}).then(res => {

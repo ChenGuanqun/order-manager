@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static order.manager.constant.OrderConstants.ORDER_STATUS_INIT;
+
+
 /**
  * @author chentao01
  * @version 2018/2/12
@@ -18,7 +21,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public boolean insert(OrderInfo orderInfo, String operator) {
 
-        orderInfo.setStatus(1);
+        orderInfo.setConfig("[]");
+        orderInfo.setStatus(ORDER_STATUS_INIT);
         orderInfo.setCreator(operator);
         orderInfo.setLastOperator(operator);
         orderInfo.setLastModifyTime(System.currentTimeMillis());

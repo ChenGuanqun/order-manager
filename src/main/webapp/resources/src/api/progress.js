@@ -6,5 +6,14 @@ export default {
     return ajax.post('/api/order/query', {
       params: params
     })
-  }
+  },
+
+    updateOrder(params) {
+        return ajax.post('/api/order/update',  {
+            id: params.id,
+            status: params.status,
+            configArray: params.configArray,
+            description: params.description
+        })
+    }
 }

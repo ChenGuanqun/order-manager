@@ -10,6 +10,7 @@ import order.manager.dao.abst.BaseBean;
 @Data
 public class OrderInfo extends BaseBean{
     private Long id;
+    private String customerName;
     private Long productId;
     private String productName;
     private String productSeries;
@@ -18,4 +19,5 @@ public class OrderInfo extends BaseBean{
     private Long orderDate;
     private Long planDate;
     private Integer status;
+    private String config;
 }

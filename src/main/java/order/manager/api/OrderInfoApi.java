@@ -1,6 +1,8 @@
 package order.manager.api;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.log4j.Log4j2;
 import order.manager.constant.ApiResponse;
 import order.manager.constant.DataListResult;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -29,7 +32,9 @@ import java.util.List;
 @Log4j2
 @Controller
 @RequestMapping(value = "/api/order")
-public class OrderInfoApi extends AbstractApi{
+public class OrderInfoApi extends AbstractApi {
+
+    private Gson gson = new Gson();
 
     @Resource
     private OrderInfoService orderInfoService;
@@ -44,8 +49,10 @@ public class OrderInfoApi extends AbstractApi{
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> updateUser(@RequestBody OrderInfo orderInfo) throws ServiceException {
-        boolean ret = orderInfoService.updateById(orderInfo, getOperatorFromContext());
+    public ApiResponse<Boolean> updateUser(@RequestBody OrderInfoVO orderInfoVO) throws ServiceException {
+        String[] configArray = orderInfoVO.getConfigArray();
+        orderInfoVO.setConfig(gson.toJson(configArray));
+        boolean ret = orderInfoService.updateById(orderInfoVO, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
 
@@ -60,18 +67,26 @@ public class OrderInfoApi extends AbstractApi{
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<DataListResult<OrderInfo>> queryUser(@RequestBody OrderInfoQuery query) throws ServiceException {
+    public ApiResponse<DataListResult<OrderInfoVO>> queryUser(@RequestBody OrderInfoQuery query) throws ServiceException {
 
-        DataListResult<OrderInfo> result = new DataListResult<>();
+        DataListResult<OrderInfoVO> result = new DataListResult<>();
         result.setCount((long) orderInfoService.queryCount(query));
         List<OrderInfo> orderInfoList = Lists.newArrayList();
+        List<OrderInfoVO> voList = Lists.newArrayList();
         if (result.getCount() > 0) {
             List<OrderInfo> userInfos = orderInfoService.queryList(query);
             if (CollectionUtils.isNotEmpty(userInfos)) {
                 orderInfoList = userInfos;
+                for (OrderInfo orderInfo : orderInfoList) {
+                    OrderInfoVO vo = DOZER_BEAN_MAPPER.map(orderInfo, OrderInfoVO.class);
+                    Type type = new TypeToken<String[]>() {
+                    }.getType();
+                    vo.setConfigArray((String[])gson.fromJson(vo.getConfig(), type));
+                    voList.add(vo);
+                }
             }
         }
-        result.setData(orderInfoList);
+        result.setData(voList);
         return new ApiResponse<>(result);
     }
 
