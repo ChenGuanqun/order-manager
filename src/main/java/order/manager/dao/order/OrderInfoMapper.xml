@@ -80,13 +80,22 @@
 
     <sql id="OrderInfo_query_condition">
         <where>
-            <if test="status != null and status > 0">
-                AND Status = #{status},
-            </if>
-            <if test="creator != null and creator != ''">
-                AND Creator = #{creator},
+            <if test="customerName != null and customerName !=''">
+                AND customerName LIKE CONCAT('%', REPLACE(REPLACE(#{customerName},'%','\%'),'_','\_'), '%')
             </if>
 
+            <if test="productName != null and productName !=''">
+                AND ProductName LIKE CONCAT('%', REPLACE(REPLACE(#{productName},'%','\%'),'_','\_'), '%')
+            </if>
+
+            <if test="status != null and status > 0">
+                AND Status = #{status}
+            </if>
+            <if test="creator != null and creator != ''">
+                AND Creator = #{creator}
+            </if>
+            <if test="startTime > 0">AND <![CDATA[ DeliveryDate >= #{startTime} ]]>  </if>
+            <if test="endTime >  0">AND <![CDATA[ DeliveryDate <= #{endTime} ]]>  </if>
         </where>
     </sql>
 

@@ -2,14 +2,18 @@
 import ajax from './index'
 
 export default {
-  queryOrder(params) {
-    return ajax.post('/api/order/query', {
-      params: params
-    })
-  },
+    queryOrder(params) {
+        return ajax.post('/api/order/query', {
+            customerName: params.customerName,
+            productName: params.productName,
+            status: params.status,
+            startTime: params.startTime,
+            endTime: params.endTime
+        })
+    },
 
     updateOrder(params) {
-        return ajax.post('/api/order/update',  {
+        return ajax.post('/api/order/update', {
             id: params.id,
             status: params.status,
             configArray: params.configArray,

@@ -97,7 +97,7 @@
             return {
                 tableData: [],
                 formInline: {
-                    uerName: ''
+                    userName: ''
                 },
                 dialogFormVisible: false,
                 form: {
@@ -110,25 +110,31 @@
             };
         },
         created() {
-            request.queryUsers({}).then(res => {
-                this.tableData = res.data.result.data
-            }).catch(err => {
-                // 处理请求错误的情况
-            })
+            this.fetchAllUsers({});
         },
         methods: {
             dateFormatter(row, col, value) {
                 return util.dateHandle(value);
             },
-            fetchAllUsers(params) {
+            fetchAllUsers(params, isSubmit) {
                 request.queryUsers(params).then(res => {
                     this.tableData = res.data.result.data
+                    if(isSubmit && res.data.code == 200) {
+                        this.$message({
+                            message: '查询成功!',
+                            type: 'success'
+                        });
+                    }
+
+                    if(res.data.code != 200) {
+                        this.$message.error('查询失败,msg:' + res.data.msg);
+                    }
                 }).catch(err => {
                     // 处理请求错误的情况
                 })
             },
             onSubmit() {
-                this.fetchAllUsers(this.formInline);
+                this.fetchAllUsers(this.formInline, true);
             },
             closeDialog() {
                 this.dialogFormVisible = false;
@@ -140,7 +146,7 @@
 
             handleCreate(){
                 this.form = {
-                    uerName: '',
+                    userName: '',
                     description: ''
                 }
                 this.dialogFormVisible = true;

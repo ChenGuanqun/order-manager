@@ -8,6 +8,11 @@ import lombok.Data;
  */
 @Data
 public class OrderInfoQuery extends OrderInfo{
+
+    private long startTime = -1;
+
+    private long endTime = -1;
+
     private int pageNum = 1;
 
     private int pageSize = 20;
