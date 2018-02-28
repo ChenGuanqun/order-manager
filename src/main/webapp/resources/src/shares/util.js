@@ -5,6 +5,10 @@ export default {
      * 时间转换
      */
     dateHandle (val, detai) {
+        if(val == -1) {
+            return "";
+        }
+
         var date = new Date(val);
 
         var zero = function(str) {

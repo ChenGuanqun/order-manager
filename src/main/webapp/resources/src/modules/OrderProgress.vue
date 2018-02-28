@@ -30,6 +30,76 @@
             </el-form-item>
         </el-form>
 
+        <el-dialog title="订单进步操作" :visible.sync="dialogFormVisible" width='400px'>
+            <el-form :model="form">
+                <el-form-item label="客户名称" label-width='80px'>
+                    <el-input v-model="form.customerName" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="产品名称" label-width='80px'>
+                    <el-input v-model="form.productName" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="产品型号" label-width='80px'>
+                    <el-input v-model="form.productSeries" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="数量" label-width='80px'>
+                    <el-input v-model="form.number" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="订单时间:" label-width='80px'>
+                    <el-date-picker
+                            v-model="form.orderDate"
+                            type="date"
+                            value-format="timestamp"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="交货时间:" label-width='80px'>
+                    <el-date-picker
+                            v-model="form.deliveryDate"
+                            type="date"
+                            value-format="timestamp"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="计划时间:" label-width='80px'>
+                    <el-date-picker
+                            v-model="form.planDate"
+                            type="date"
+                            value-format="timestamp"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+
+            <el-form :model="form">
+                <el-form-item label="产品要求" label-width='80px'>
+                    <el-input v-model="form.description" type="textarea" :rows="3" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeDialog">取 消</el-button>
+                <el-button type="primary" @click="doOperate">确 定</el-button>
+            </div>
+        </el-dialog>
+
         <el-table
                 :data="tableData"
                 style="width: 100%">
@@ -126,7 +196,7 @@
             <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
-                    <el-button @click="handleDelete(scope.row)" type="text" size="mini">删除</el-button>
+                    <el-button @click="handleDelete(scope.row)" type="text" size="mini" :disabled="true">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -147,6 +217,17 @@
                     productName: '',
                     status: '0',
                     deliveryDateRange: []
+                },
+                dialogFormVisible: false,
+                form: {
+                    customerName: '',
+                    productName: '',
+                    productSeries:'',
+                    number:'',
+                    planDate:null,
+                    orderDate:null,
+                    deliveryDate:null,
+                    description:''
                 }
             }
         },
@@ -155,7 +236,7 @@
         },
         methods: {
             dateFormatter(row, col, value) {
-                return util.dateHandle(value, false);
+                return util.dateHandle(value);
             },
             fetchAllOrders(params, isSubmit) {
                 request.queryOrder(params).then(res => {
@@ -187,7 +268,7 @@
                 this.fetchAllOrders(queryParams, true);
             },
             handleCreate(){
-
+                this.dialogFormVisible = true;
             },
             handleEdit(row) {
                 console.log(row);
@@ -227,7 +308,47 @@
                 }).catch(err => {
                     // 处理请求错误的情况
                 })
-            }
+            },
+            closeDialog() {
+                this.dialogFormVisible = false;
+//                this.form = {
+//                    userName: '',
+//                    description: ''
+//                }
+            },
+            doOperate() {
+                this.dialogFormVisible = false;
+//                if(!this.isEdit){
+                    //创建用户
+                    request.createOrder(this.form).then(res => {
+                        if(res.data.code == 200 && res.data.result){
+                            this.$message({
+                                message: '创建成功!',
+                                type: 'success'
+                            });
+                            this.fetchAllOrders({});
+                        } else {
+                            this.$message.error('创建失败!');
+                        }
+                    }).catch(err => {
+                        // 处理请求错误的情况
+                    })
+//                }else {
+//                    //编辑用户
+//                    request.updateUser({id:this.$_currentEditUser.id, description:this.form.description}).then(res => {
+//                        if(res.data.code == 200 && res.data.result){
+//                            this.$message({
+//                                message: '用户信息更新成功!',
+//                                type: 'success'
+//                            });
+//                            this.fetchAllUsers({});
+//                        } else {
+//                            this.$message.error('用户信息更新失败!');
+//                        }
+//                    }).catch(err => {
+//                        // 处理请求错误的情况
+//                    })
+                }
         }
     }
 </script>

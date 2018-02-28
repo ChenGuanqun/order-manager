@@ -114,7 +114,7 @@
         },
         methods: {
             dateFormatter(row, col, value) {
-                return util.dateHandle(value);
+                return util.dateHandle(value, true);
             },
             fetchAllUsers(params, isSubmit) {
                 request.queryUsers(params).then(res => {

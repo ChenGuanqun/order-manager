@@ -51,7 +51,9 @@ public class OrderInfoApi extends AbstractApi {
     @ResponseBody
     public ApiResponse<Boolean> updateUser(@RequestBody OrderInfoVO orderInfoVO) throws ServiceException {
         String[] configArray = orderInfoVO.getConfigArray();
-        orderInfoVO.setConfig(gson.toJson(configArray));
+        if(configArray != null) {
+            orderInfoVO.setConfig(gson.toJson(configArray));
+        }
         boolean ret = orderInfoService.updateById(orderInfoVO, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }

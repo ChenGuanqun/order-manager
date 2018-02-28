@@ -41,15 +41,15 @@
             Number = #{number},
         </if>
 
-        <if test="deliveryDate != null and deliveryDate >= 0">
+        <if test="deliveryDate != null and deliveryDate >= -1">
             DeliveryDate = #{deliveryDate},
         </if>
 
-        <if test="orderDate != null and orderDate >= 0">
+        <if test="orderDate != null and orderDate >= -1">
             OrderDate = #{orderDate},
         </if>
 
-        <if test="planDate != null and planDate >= 0">
+        <if test="planDate != null and planDate >= -1">
             PlanDate = #{planDate},
         </if>
 

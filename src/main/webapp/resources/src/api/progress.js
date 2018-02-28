@@ -19,5 +19,17 @@ export default {
             configArray: params.configArray,
             description: params.description
         })
-    }
+    },
+    createOrder(params) {
+        return ajax.post('/api/order/create', {
+            customerName: params.customerName,
+            productName: params.productName,
+            productSeries: params.productSeries,
+            number: params.number,
+            deliveryDate: params.deliveryDate,
+            orderDate: params.orderDate,
+            planDate: params.planDate,
+            description: params.description
+        })
+    },
 }
