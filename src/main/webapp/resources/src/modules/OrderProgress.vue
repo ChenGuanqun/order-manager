@@ -152,29 +152,34 @@
             <!--:formatter="dateFormatter">-->
             <!--</el-table-column>-->
             <el-table-column
-                    prop="description"
+
                     label="产品要求"
-                    width="400">
+                    width="200">
+                <template slot-scope="scope">
+                    <el-tooltip :content="scope.row.description" placement="top">
+                        <span class="description_limit">{{scope.row.description}}</span>
+                    </el-tooltip>
+                </template>
             </el-table-column>
 
             <el-table-column
                     prop="properties"
                     label="配件一览"
-                    width="293">
+                    width="493">
                 <template slot-scope="scope">
                     <el-checkbox-group v-model="scope.row.configArray" @change="configChange(scope.row)">
                         <el-checkbox label="油漆"></el-checkbox>
                         <el-checkbox label="定子"></el-checkbox>
-                        <el-checkbox label="转子"></el-checkbox><br>
+                        <el-checkbox label="转子"></el-checkbox>
                         <el-checkbox label="风罩"></el-checkbox>
-                        <el-checkbox label="钢板件"></el-checkbox>
-                        <el-checkbox label="轴"></el-checkbox><br>
+                        <el-checkbox label="钢板件"></el-checkbox><br>
+                        <el-checkbox label="轴"></el-checkbox>
                         <el-checkbox label="盖头"></el-checkbox>
                         <el-checkbox label="机壳"></el-checkbox>
-                        <el-checkbox label="转子总成"></el-checkbox><br>
-                        <el-checkbox label="定子总成"></el-checkbox>
+                        <el-checkbox label="转子总成"></el-checkbox>
+                        <el-checkbox label="定子总成"></el-checkbox><br>
                         <el-checkbox label="包装"></el-checkbox>
-                        <el-checkbox label="标牌"></el-checkbox><br>
+                        <el-checkbox label="标牌"></el-checkbox>
                         <el-checkbox label="开关"></el-checkbox>
                         <el-checkbox label="线缆"></el-checkbox>
                     </el-checkbox-group>
@@ -196,7 +201,7 @@
             <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
-                    <el-button @click="handleDelete(scope.row)" type="text" size="mini" :disabled="true">删除</el-button>
+                    <el-button @click="handleDelete(scope.row)" type="text" size="mini">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -222,13 +227,14 @@
                 form: {
                     customerName: '',
                     productName: '',
-                    productSeries:'',
-                    number:'',
-                    planDate:null,
-                    orderDate:null,
-                    deliveryDate:null,
-                    description:''
-                }
+                    productSeries: '',
+                    number: '',
+                    planDate: null,
+                    orderDate: null,
+                    deliveryDate: null,
+                    description: ''
+                },
+                isEdit: false
             }
         },
         created() {
@@ -241,14 +247,14 @@
             fetchAllOrders(params, isSubmit) {
                 request.queryOrder(params).then(res => {
                     this.tableData = res.data.result.data
-                    if(isSubmit && res.data.code == 200) {
+                    if (isSubmit && res.data.code == 200) {
                         this.$message({
                             message: '查询成功!',
                             type: 'success'
                         });
                     }
 
-                    if(res.data.code != 200) {
+                    if (res.data.code != 200) {
                         this.$message.error('查询失败,msg:' + res.data.msg);
                     }
                 }).catch(err => {
@@ -258,7 +264,7 @@
             onSubmit() {
                 console.info(this.formInline)
                 var queryParams = this.formInline;
-                if(this.formInline.deliveryDateRange != undefined && this.formInline.deliveryDateRange.length > 0) {
+                if (this.formInline.deliveryDateRange != undefined && this.formInline.deliveryDateRange.length > 0) {
                     queryParams.startTime = this.formInline.deliveryDateRange[0]
                     queryParams.endTime = this.formInline.deliveryDateRange[1]
                 } else {
@@ -268,26 +274,60 @@
                 this.fetchAllOrders(queryParams, true);
             },
             handleCreate(){
+                this.resetFormData();
                 this.dialogFormVisible = true;
+                this.isEdit = false;
             },
             handleEdit(row) {
-                console.log(row);
+                this.resetFormData();
+                this.$_currentEditOrder = row;
+                this.form.customerName = row.customerName;
+                this.form.productName = row.productName;
+                this.form.productSeries = row.productSeries;
+                this.form.number = row.number;
+                this.form.description = row.description;
+                if (row.planDate >= 0) {
+                    this.form.planDate = row.planDate;
+                }
+
+                if (row.orderDate >= 0) {
+                    this.form.orderDate = row.orderDate;
+                }
+
+                if (row.deliveryDate >= 0) {
+                    this.form.deliveryDate = row.deliveryDate;
+                }
+
+                this.dialogFormVisible = true;
+                this.isEdit = true;
             },
             handleDelete(row) {
-                console.log(row);
+                request.deleteOrder(row).then(res => {
+                    if(res.data.code == 200 && res.data.result){
+                        this.$message({
+                            message: '删除成功!',
+                            type: 'success'
+                        });
+                        this.fetchAllOrders({});
+                    } else {
+                        this.$message.error('删除失败!');
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
             },
             statusChange(row) {
-                request.updateOrder({status:row.status,id:row.id}).then(res => {
-                    if(res.data.code == 200 && res.data.result){
+                request.updateStatus({status: row.status, id: row.id}).then(res => {
+                    if (res.data.code == 200 && res.data.result) {
                         this.$message({
                             message: '状态更新成功!',
                             type: 'success'
                         });
                     } else {
                         this.$message.error('状态更新失败!');
-                        if(row.status == 1) {
+                        if (row.status == 1) {
                             row.status = 2;
-                        } else if (row.status == 2){
+                        } else if (row.status == 2) {
                             row.status = 1;
                         }
                     }
@@ -296,8 +336,8 @@
                 })
             },
             configChange(row) {
-                request.updateOrder({configArray:row.configArray,id:row.id}).then(res => {
-                    if(res.data.code == 200 && res.data.result){
+                request.updateStatus({configArray: row.configArray, id: row.id}).then(res => {
+                    if (res.data.code == 200 && res.data.result) {
                         this.$message({
                             message: '配件状态更新成功!',
                             type: 'success'
@@ -316,12 +356,24 @@
 //                    description: ''
 //                }
             },
+            resetFormData() {
+                this.form = {
+                    customerName: '',
+                    productName: '',
+                    productSeries: '',
+                    number: '',
+                    planDate: null,
+                    orderDate: null,
+                    deliveryDate: null,
+                    description: ''
+                }
+            },
             doOperate() {
                 this.dialogFormVisible = false;
-//                if(!this.isEdit){
+                if (!this.isEdit) {
                     //创建用户
                     request.createOrder(this.form).then(res => {
-                        if(res.data.code == 200 && res.data.result){
+                        if (res.data.code == 200 && res.data.result) {
                             this.$message({
                                 message: '创建成功!',
                                 type: 'success'
@@ -333,22 +385,33 @@
                     }).catch(err => {
                         // 处理请求错误的情况
                     })
-//                }else {
-//                    //编辑用户
-//                    request.updateUser({id:this.$_currentEditUser.id, description:this.form.description}).then(res => {
-//                        if(res.data.code == 200 && res.data.result){
-//                            this.$message({
-//                                message: '用户信息更新成功!',
-//                                type: 'success'
-//                            });
-//                            this.fetchAllUsers({});
-//                        } else {
-//                            this.$message.error('用户信息更新失败!');
-//                        }
-//                    }).catch(err => {
-//                        // 处理请求错误的情况
-//                    })
+                } else {
+                    //编辑用户
+                    request.updateOrder({
+                        id: this.$_currentEditOrder.id,
+                        customerName: this.form.customerName,
+                        productName: this.form.productName,
+                        productSeries: this.form.productSeries,
+                        number: this.form.number,
+                        deliveryDate: this.form.deliveryDate,
+                        orderDate: this.form.orderDate,
+                        planDate: this.form.planDate,
+                        description: this.form.description
+                    }).then(res => {
+                        if (res.data.code == 200 && res.data.result) {
+                            this.$message({
+                                message: '信息更新成功!',
+                                type: 'success'
+                            });
+                            this.fetchAllOrders({});
+                        } else {
+                            this.$message.error('信息更新失败!');
+                        }
+                    }).catch(err => {
+                        // 处理请求错误的情况
+                    })
                 }
+            }
         }
     }
 </script>
@@ -356,5 +419,15 @@
 <style>
     .el-checkbox__label {
         width: 33px;
+    }
+    .el-tooltip__popper{
+        width: 400px;
+    }
+    .description_limit {
+        display: inline-block;
+        max-width: 175px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 </style>

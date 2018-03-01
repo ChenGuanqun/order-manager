@@ -46,16 +46,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public boolean updateById(OrderInfo orderInfo, String operator) {
-        if(orderInfo.getOrderDate() == null) {
-            orderInfo.setOrderDate(-1L);
-        }
-        if(orderInfo.getDeliveryDate() == null) {
-            orderInfo.setDeliveryDate(-1L);
-        }
-        if(orderInfo.getPlanDate() == null) {
-            orderInfo.setPlanDate(-1L);
-        }
-
         orderInfo.setLastOperator(operator);
         orderInfo.setLastModifyTime(System.currentTimeMillis());
         return orderInfoDAO.updateById(orderInfo);

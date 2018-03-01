@@ -107,6 +107,10 @@
         <include refid="OrderInfo_query_condition"></include>
     </select>
 
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM order_info WHERE Id = #{id}
+    </delete>
+
     <select id="queryList" parameterType="OrderInfoQuery" resultType="OrderInfo">
         SELECT
         <include refid="OrderInfo_allFields"/>

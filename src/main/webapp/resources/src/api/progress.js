@@ -12,12 +12,16 @@ export default {
         })
     },
 
-    updateOrder(params) {
-        return ajax.post('/api/order/update', {
+    updateStatus(params) {
+        return ajax.post('/api/order/updateStatus', {
             id: params.id,
             status: params.status,
-            configArray: params.configArray,
-            description: params.description
+            configArray: params.configArray
+        })
+    },
+    deleteOrder(params) {
+        return ajax.post('/api/order/delete', {
+            id: params.id
         })
     },
     createOrder(params) {
@@ -32,4 +36,17 @@ export default {
             description: params.description
         })
     },
+    updateOrder(params) {
+        return ajax.post('/api/order/update', {
+            id: params.id,
+            customerName: params.customerName,
+            productName: params.productName,
+            productSeries: params.productSeries,
+            number: params.number,
+            deliveryDate: params.deliveryDate,
+            orderDate: params.orderDate,
+            planDate: params.planDate,
+            description: params.description
+        })
+    }
 }

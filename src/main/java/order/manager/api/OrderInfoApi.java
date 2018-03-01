@@ -41,7 +41,7 @@ public class OrderInfoApi extends AbstractApi {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> createUser(@RequestBody OrderInfo orderInfo) throws ServiceException {
+    public ApiResponse<Boolean> createOrder(@RequestBody OrderInfo orderInfo) throws ServiceException {
         boolean ret = orderInfoService.insert(orderInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
     }
@@ -49,7 +49,27 @@ public class OrderInfoApi extends AbstractApi {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> updateUser(@RequestBody OrderInfoVO orderInfoVO) throws ServiceException {
+    public ApiResponse<Boolean> updateOrder(@RequestBody OrderInfoVO orderInfoVO) throws ServiceException {
+        String[] configArray = orderInfoVO.getConfigArray();
+        if(configArray != null) {
+            orderInfoVO.setConfig(gson.toJson(configArray));
+        }
+        if(orderInfoVO.getOrderDate() == null) {
+            orderInfoVO.setOrderDate(-1L);
+        }
+        if(orderInfoVO.getDeliveryDate() == null) {
+            orderInfoVO.setDeliveryDate(-1L);
+        }
+        if(orderInfoVO.getPlanDate() == null) {
+            orderInfoVO.setPlanDate(-1L);
+        }
+        boolean ret = orderInfoService.updateById(orderInfoVO, getOperatorFromContext());
+        return new ApiResponse<>(ret);
+    }
+
+    @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<Boolean> updateOrderStatus(@RequestBody OrderInfoVO orderInfoVO) throws ServiceException {
         String[] configArray = orderInfoVO.getConfigArray();
         if(configArray != null) {
             orderInfoVO.setConfig(gson.toJson(configArray));
@@ -60,7 +80,8 @@ public class OrderInfoApi extends AbstractApi {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<Boolean> deleteUser(Long id) throws ServiceException {
+    public ApiResponse<Boolean> deleteOrder(@RequestBody OrderInfo orderInfo) throws ServiceException {
+        Long id = orderInfo.getId();
         Validate.isTrue(id != null && id > 0, "id不合法");
         boolean ret = orderInfoService.deleteById(id);
         return new ApiResponse<>(ret);
@@ -69,7 +90,7 @@ public class OrderInfoApi extends AbstractApi {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResponse<DataListResult<OrderInfoVO>> queryUser(@RequestBody OrderInfoQuery query) throws ServiceException {
+    public ApiResponse<DataListResult<OrderInfoVO>> queryOrder(@RequestBody OrderInfoQuery query) throws ServiceException {
 
         DataListResult<OrderInfoVO> result = new DataListResult<>();
         result.setCount((long) orderInfoService.queryCount(query));
