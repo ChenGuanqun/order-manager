@@ -205,6 +205,14 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <el-pagination
+                background
+                layout="total, prev, pager, next"
+                @current-change="handleCurrentChange"
+                :page-size="10"
+                :total="totalCount">
+        </el-pagination>
     </div>
 
 </template>
@@ -234,11 +242,13 @@
                     deliveryDate: null,
                     description: ''
                 },
-                isEdit: false
+                isEdit: false,
+                totalCount:0,
+                currentPage:1
             }
         },
         created() {
-            this.fetchAllOrders({});
+            this.fetchAllOrders({pageNum:this.currentPage});
         },
         methods: {
             dateFormatter(row, col, value) {
@@ -246,7 +256,8 @@
             },
             fetchAllOrders(params, isSubmit) {
                 request.queryOrder(params).then(res => {
-                    this.tableData = res.data.result.data
+                    this.tableData = res.data.result.data;
+                    this.totalCount = res.data.result.count;
                     if (isSubmit && res.data.code == 200) {
                         this.$message({
                             message: '查询成功!',
@@ -262,7 +273,7 @@
                 })
             },
             onSubmit() {
-                console.info(this.formInline)
+//                console.info(this.formInline)
                 var queryParams = this.formInline;
                 if (this.formInline.deliveryDateRange != undefined && this.formInline.deliveryDateRange.length > 0) {
                     queryParams.startTime = this.formInline.deliveryDateRange[0]
@@ -271,6 +282,7 @@
                     queryParams.startTime = -1
                     queryParams.endTime = -1
                 }
+                queryParams.pageNum = this.currentPage;
                 this.fetchAllOrders(queryParams, true);
             },
             handleCreate(){
@@ -308,7 +320,7 @@
                             message: '删除成功!',
                             type: 'success'
                         });
-                        this.fetchAllOrders({});
+                        this.fetchAllOrders({pageNum:this.currentPage});
                     } else {
                         this.$message.error('删除失败!');
                     }
@@ -368,6 +380,11 @@
                     description: ''
                 }
             },
+            handleCurrentChange(val) {
+//                console.log(`当前页: ${val}`);
+                this.currentPage  = val;
+                this.onSubmit();
+            },
             doOperate() {
                 this.dialogFormVisible = false;
                 if (!this.isEdit) {
@@ -378,7 +395,7 @@
                                 message: '创建成功!',
                                 type: 'success'
                             });
-                            this.fetchAllOrders({});
+                            this.fetchAllOrders({pageNum:1});
                         } else {
                             this.$message.error('创建失败!');
                         }
@@ -403,7 +420,7 @@
                                 message: '信息更新成功!',
                                 type: 'success'
                             });
-                            this.fetchAllOrders({});
+                            this.fetchAllOrders({pageNum:this.currentPage});
                         } else {
                             this.$message.error('信息更新失败!');
                         }

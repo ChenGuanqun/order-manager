@@ -8,7 +8,9 @@ export default {
             productName: params.productName,
             status: params.status,
             startTime: params.startTime,
-            endTime: params.endTime
+            endTime: params.endTime,
+            pageNum : params.pageNum,
+            pageSize : 10
         })
     },
 
