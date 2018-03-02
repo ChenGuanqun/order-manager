@@ -6,7 +6,8 @@
 
     <groupId>order-manager</groupId>
     <artifactId>order-manager</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <version>1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -282,9 +283,9 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <path>/</path>
-                    <!-- <serverXml>target/server.xml</serverXml> -->
-                    <port>8883</port>
+                    <url>http://67.218.153.184:8080/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/order-manager</path>
                 </configuration>
             </plugin>
         </plugins>
