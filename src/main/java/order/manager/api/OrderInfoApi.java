@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,9 +59,20 @@ public class OrderInfoApi extends AbstractApi {
         if(orderInfoVO.getOrderDate() == null) {
             orderInfoVO.setOrderDate(-1L);
         }
-        if(orderInfoVO.getDeliveryDate() == null) {
-            orderInfoVO.setDeliveryDate(-1L);
-        }
+
+        /**
+         * 生产序号根据订单时间年度来递增，不能为空
+         */
+        Long orderDate = orderInfoVO.getOrderDate();
+        Validate.isTrue(orderDate != null && orderDate > 0,
+                "订单时间不能为空");
+        OrderInfo oldOrderInfo = orderInfoService.getById(orderInfoVO.getId());
+        Validate.isTrue(oldOrderInfo != null,"OrderInfo为空");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(orderDate));
+        int year = c.get(Calendar.YEAR);
+        Validate.isTrue(year == oldOrderInfo.getOrderYear(), "订单时间修改不能跨年度");
+
         if(orderInfoVO.getPlanDate() == null) {
             orderInfoVO.setPlanDate(-1L);
         }

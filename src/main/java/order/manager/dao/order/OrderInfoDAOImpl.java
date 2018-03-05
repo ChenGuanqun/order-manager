@@ -26,4 +26,13 @@ public class OrderInfoDAOImpl extends BaseDaoImpl<OrderInfo> implements OrderInf
     public int queryCount(OrderInfoQuery query) {
         return getSqlSessionTemplate().selectOne(getNameSpace() + "queryCount", query);
     }
+
+    @Override
+    public Integer getCurrentYearMaxId(Integer orderYear) {
+        if(orderYear == null || orderYear <= 0) {
+            return null;
+        }
+
+        return getSqlSessionTemplate().selectOne(getNameSpace() + "getCurrentYearMaxId", orderYear);
+    }
 }

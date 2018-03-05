@@ -27,6 +27,8 @@
 
  CREATE TABLE `order` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `OrderId` int NOT NULL COMMENT '产品序列按年度1开始',
+  `OrderYear` int NOT NULL COMMENT '产品年度',
   `CustomerName` varchar(256)  comment '客户名称',
   `ProductId` bigint(20)  comment '产品id',
   `ProductName` varchar(256)  comment '产品名称',

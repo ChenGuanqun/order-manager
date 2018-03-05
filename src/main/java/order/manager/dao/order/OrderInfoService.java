@@ -20,4 +20,6 @@ public interface OrderInfoService {
     List<OrderInfo> queryList(OrderInfoQuery query);
 
     int queryCount(OrderInfoQuery query);
+
+    OrderInfo getById(Long id);
 }

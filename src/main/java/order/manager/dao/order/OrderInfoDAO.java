@@ -16,4 +16,6 @@ public interface OrderInfoDAO extends BaseDao<OrderInfo> {
     List<OrderInfo> queryList(OrderInfoQuery query);
 
     int queryCount(OrderInfoQuery query);
+
+    Integer getCurrentYearMaxId(Integer orderYear);
 }

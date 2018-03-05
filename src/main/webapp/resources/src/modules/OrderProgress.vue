@@ -1,11 +1,17 @@
 <template>
     <div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="生产序号:">
+                <el-input v-model="formInline.orderId" value="number" placeholder="orderId"></el-input>
+            </el-form-item>
             <el-form-item label="客户名称:">
                 <el-input v-model="formInline.customerName" placeholder="customerName"></el-input>
             </el-form-item>
             <el-form-item label="产品名称:">
                 <el-input v-model="formInline.productName" placeholder="productName"></el-input>
+            </el-form-item>
+            <el-form-item label="产品型号:">
+                <el-input v-model="formInline.productSeries" placeholder="productSeries"></el-input>
             </el-form-item>
             <el-form-item label="交货时间:">
                 <el-date-picker
@@ -61,6 +67,8 @@
                             v-model="form.orderDate"
                             type="date"
                             value-format="timestamp"
+                            :clearable="false"
+                            :editable="false"
                             placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
@@ -104,6 +112,11 @@
                 :data="tableData"
                 style="width: 100%">
             <el-table-column
+                    prop="orderId"
+                    label="生产序号"
+                    width="90">
+            </el-table-column>
+            <el-table-column
                     prop="customerName"
                     label="客户名称"
                     width="100">
@@ -127,32 +140,21 @@
                     prop="deliveryDate"
                     label="交货时间"
                     :formatter="dateFormatter"
-                    width="150">
+                    width="120">
             </el-table-column>
             <el-table-column
                     prop="orderDate"
                     label="订单时间"
                     :formatter="dateFormatter"
-                    width="150">
+                    width="120">
             </el-table-column>
             <el-table-column
                     prop="planDate"
                     label="计划时间"
                     :formatter="dateFormatter"
-                    width="150">
+                    width="120">
             </el-table-column>
-            <!--<el-table-column-->
-            <!--prop="insertTime"-->
-            <!--label="创建日期"-->
-            <!--:formatter="dateFormatter">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="lastModifyTime"-->
-            <!--label="修改日期"-->
-            <!--:formatter="dateFormatter">-->
-            <!--</el-table-column>-->
             <el-table-column
-
                     label="产品要求"
                     width="200">
                 <template slot-scope="scope">
@@ -227,7 +229,9 @@
                 tableData: [],
                 checkList: [],
                 formInline: {
+                    orderId: null,
                     productName: '',
+                    productSeries: '',
                     status: '0',
                     deliveryDateRange: []
                 },
@@ -238,7 +242,7 @@
                     productSeries: '',
                     number: '',
                     planDate: null,
-                    orderDate: null,
+                    orderDate: new Date().getTime(),
                     deliveryDate: null,
                     description: ''
                 },
@@ -273,7 +277,14 @@
                 })
             },
             onSubmit() {
-//                console.info(this.formInline)
+                /**
+                 * 查询按钮
+                 * @type {*}
+                 */
+                if(this.formInline.orderId == "") {
+                    this.formInline.orderId = null;
+                }
+
                 var queryParams = this.formInline;
                 if (this.formInline.deliveryDateRange != undefined && this.formInline.deliveryDateRange.length > 0) {
                     queryParams.startTime = this.formInline.deliveryDateRange[0]
@@ -375,7 +386,7 @@
                     productSeries: '',
                     number: '',
                     planDate: null,
-                    orderDate: null,
+                    orderDate: new Date().getTime(),
                     deliveryDate: null,
                     description: ''
                 }

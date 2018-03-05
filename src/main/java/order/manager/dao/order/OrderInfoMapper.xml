@@ -4,14 +4,14 @@
 
     <sql id="OrderInfo_allFields">
         Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-         Creator, InsertTime, LastOperator, LastModifyTime, Description
+         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear
     </sql>
 
     <insert id="insert" parameterType="OrderInfo">
      INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-     Creator, InsertTime, LastOperator, LastModifyTime, Description)
+     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear)
         VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
-         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description})
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{orderYear})
     </insert>
 
     <update id="updateById" parameterType="OrderInfo">
@@ -78,14 +78,31 @@
         </where>
     </select>
 
+    <select id="getCurrentYearMaxId" parameterType="Integer" resultType="Integer">
+        SELECT
+        Max(OrderId)
+        FROM order_info
+        <where>
+            OrderYear = #{orderYear}
+        </where>
+    </select>
+
     <sql id="OrderInfo_query_condition">
         <where>
             <if test="customerName != null and customerName !=''">
                 AND customerName LIKE CONCAT('%', REPLACE(REPLACE(#{customerName},'%','\%'),'_','\_'), '%')
             </if>
 
+            <if test="orderId != null and orderId > 0">
+                AND OrderId = #{orderId}
+            </if>
+
             <if test="productName != null and productName !=''">
                 AND ProductName LIKE CONCAT('%', REPLACE(REPLACE(#{productName},'%','\%'),'_','\_'), '%')
+            </if>
+
+            <if test="productSeries != null and productSeries !=''">
+                AND ProductSeries LIKE CONCAT('%', REPLACE(REPLACE(#{productSeries},'%','\%'),'_','\_'), '%')
             </if>
 
             <if test="status != null and status > 0">
@@ -116,7 +133,7 @@
         <include refid="OrderInfo_allFields"/>
         FROM order_info
         <include refid="OrderInfo_query_condition"></include>
-        ORDER BY LastModifyTime DESC
+        ORDER BY OrderId DESC
         <if test="limit > -1">
             LIMIT #{limit}
         </if>

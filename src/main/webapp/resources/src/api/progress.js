@@ -4,8 +4,10 @@ import ajax from './index'
 export default {
     queryOrder(params) {
         return ajax.post('/api/order/query', {
+            orderId: params.orderId,
             customerName: params.customerName,
             productName: params.productName,
+            productSeries: params.productSeries,
             status: params.status,
             startTime: params.startTime,
             endTime: params.endTime,
