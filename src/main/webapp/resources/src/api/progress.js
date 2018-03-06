@@ -9,8 +9,11 @@ export default {
             productName: params.productName,
             productSeries: params.productSeries,
             status: params.status,
+            deliveryStatus: params.deliveryStatus,
             startTime: params.startTime,
             endTime: params.endTime,
+            startOrderTime: params.startOrderTime,
+            endOrderTime: params.endOrderTime,
             pageNum : params.pageNum,
             pageSize : 10
         })
@@ -20,6 +23,7 @@ export default {
         return ajax.post('/api/order/updateStatus', {
             id: params.id,
             status: params.status,
+            deliveryStatus: params.deliveryStatus,
             configArray: params.configArray
         })
     },

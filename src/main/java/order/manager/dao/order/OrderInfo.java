@@ -19,6 +19,7 @@ public class OrderInfo extends BaseBean{
     private Long orderDate;
     private Long planDate;
     private Integer status;
+    private Integer deliveryStatus;
     private String config;
     private Integer orderId;
     private Integer orderYear;

@@ -13,6 +13,10 @@ public class OrderInfoQuery extends OrderInfo{
 
     private long endTime = -1;
 
+    private long startOrderTime = -1;
+
+    private long endOrderTime = -1;
+
     private int pageNum = 1;
 
     private int pageSize = 20;

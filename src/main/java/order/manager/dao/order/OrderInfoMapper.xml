@@ -4,14 +4,14 @@
 
     <sql id="OrderInfo_allFields">
         Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear
+         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus
     </sql>
 
     <insert id="insert" parameterType="OrderInfo">
      INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear)
+     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus)
         VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
-         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{orderYear})
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{orderYear}, #{deliveryStatus})
     </insert>
 
     <update id="updateById" parameterType="OrderInfo">
@@ -55,6 +55,10 @@
 
         <if test="status != null and status > 0">
             Status = #{status},
+        </if>
+
+        <if test="deliveryStatus != null and deliveryStatus > 0">
+            DeliveryStatus = #{deliveryStatus},
         </if>
 
         <if test="lastOperator != null">
@@ -108,11 +112,19 @@
             <if test="status != null and status > 0">
                 AND Status = #{status}
             </if>
+
+            <if test="deliveryStatus != null and deliveryStatus > 0">
+                AND DeliveryStatus = #{deliveryStatus}
+            </if>
+
             <if test="creator != null and creator != ''">
                 AND Creator = #{creator}
             </if>
             <if test="startTime > 0">AND <![CDATA[ DeliveryDate >= #{startTime} ]]>  </if>
             <if test="endTime >  0">AND <![CDATA[ DeliveryDate <= #{endTime} ]]>  </if>
+
+            <if test="startOrderTime > 0">AND <![CDATA[ OrderDate >= #{startOrderTime} ]]>  </if>
+            <if test="endOrderTime >  0">AND <![CDATA[ OrderDate <= #{endOrderTime} ]]>  </if>
         </where>
     </sql>
 

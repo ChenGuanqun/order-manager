@@ -2,17 +2,28 @@
     <div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="生产序号:">
-                <el-input v-model="formInline.orderId" value="number" placeholder="orderId"></el-input>
+                <el-input v-model="formInline.orderId" value="number" placeholder="支持模糊搜索"></el-input>
             </el-form-item>
             <el-form-item label="客户名称:">
-                <el-input v-model="formInline.customerName" placeholder="customerName"></el-input>
+                <el-input v-model="formInline.customerName" placeholder="支持模糊搜索"></el-input>
             </el-form-item>
             <el-form-item label="产品名称:">
-                <el-input v-model="formInline.productName" placeholder="productName"></el-input>
+                <el-input v-model="formInline.productName" placeholder="支持模糊搜索"></el-input>
             </el-form-item>
             <el-form-item label="产品型号:">
-                <el-input v-model="formInline.productSeries" placeholder="productSeries"></el-input>
+                <el-input v-model="formInline.productSeries" placeholder="支持模糊搜索"></el-input>
             </el-form-item>
+            <el-form-item label="订单时间:">
+                <el-date-picker
+                        v-model="formInline.orderDateRange"
+                        type="daterange"
+                        value-format="timestamp"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                </el-date-picker>
+            </el-form-item>
+
             <el-form-item label="交货时间:">
                 <el-date-picker
                         v-model="formInline.deliveryDateRange"
@@ -24,10 +35,17 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="是否完工:">
-                <el-select v-model="formInline.status"  placeholder="请选择">
+                <el-select class="super_mini_el_selector" v-model="formInline.status"  placeholder="请选择">
                     <el-option label="所有" value="0"></el-option>
                     <el-option label="完工" value="2"></el-option>
                     <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="是否交货:">
+                <el-select class="super_mini_el_selector" v-model="formInline.deliveryStatus" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="交货" value="2"></el-option>
+                    <el-option label="未交货" value="1"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -140,19 +158,19 @@
                     prop="deliveryDate"
                     label="交货时间"
                     :formatter="dateFormatter"
-                    width="120">
+                    width="100">
             </el-table-column>
             <el-table-column
                     prop="orderDate"
                     label="订单时间"
                     :formatter="dateFormatter"
-                    width="120">
+                    width="100">
             </el-table-column>
             <el-table-column
                     prop="planDate"
                     label="计划时间"
                     :formatter="dateFormatter"
-                    width="120">
+                    width="100">
             </el-table-column>
             <el-table-column
                     label="产品要求"
@@ -200,6 +218,19 @@
                     </el-switch>
                 </template>
             </el-table-column>
+            <el-table-column
+                    label="交货"
+                    width='60'>
+                <template slot-scope="scope">
+                    <el-switch
+                            v-model="scope.row.deliveryStatus"
+                            :active-value="2"
+                            :inactive-value="1"
+                            :width='40'
+                            @change="deliveryStatusChange(scope.row)">
+                    </el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
@@ -233,7 +264,9 @@
                     productName: '',
                     productSeries: '',
                     status: '0',
-                    deliveryDateRange: []
+                    deliveryStatus: '0',
+                    deliveryDateRange: [],
+                    orderDateRange:[]
                 },
                 dialogFormVisible: false,
                 form: {
@@ -242,7 +275,7 @@
                     productSeries: '',
                     number: '',
                     planDate: null,
-                    orderDate: new Date().getTime(),
+                    orderDate: this.currentDayTime(),
                     deliveryDate: null,
                     description: ''
                 },
@@ -292,6 +325,14 @@
                 } else {
                     queryParams.startTime = -1
                     queryParams.endTime = -1
+                }
+
+                if (this.formInline.orderDateRange != undefined && this.formInline.orderDateRange.length > 0) {
+                    queryParams.startOrderTime = this.formInline.orderDateRange[0]
+                    queryParams.endOrderTime = this.formInline.orderDateRange[1]
+                } else {
+                    queryParams.startOrderTime = -1
+                    queryParams.endOrderTime = -1
                 }
                 queryParams.pageNum = this.currentPage;
                 this.fetchAllOrders(queryParams, true);
@@ -358,6 +399,25 @@
                     // 处理请求错误的情况
                 })
             },
+            deliveryStatusChange(row) {
+                request.updateStatus({deliveryStatus: row.deliveryStatus, id: row.id}).then(res => {
+                    if (res.data.code == 200 && res.data.result) {
+                        this.$message({
+                            message: '状态更新成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('状态更新失败!');
+                        if (row.deliveryStatus == 1) {
+                            row.deliveryStatus = 2;
+                        } else if (row.deliveryStatus == 2) {
+                            row.deliveryStatus = 1;
+                        }
+                    }
+                }).catch(err => {
+                    // 处理请求错误的情况
+                })
+            },
             configChange(row) {
                 request.updateStatus({configArray: row.configArray, id: row.id}).then(res => {
                     if (res.data.code == 200 && res.data.result) {
@@ -386,7 +446,7 @@
                     productSeries: '',
                     number: '',
                     planDate: null,
-                    orderDate: new Date().getTime(),
+                    orderDate: this.currentDayTime(),
                     deliveryDate: null,
                     description: ''
                 }
@@ -395,6 +455,14 @@
 //                console.log(`当前页: ${val}`);
                 this.currentPage  = val;
                 this.onSubmit();
+            },
+            currentDayTime() {
+                var currentDayNow = new Date();
+                currentDayNow.setHours(0);
+                currentDayNow.setMinutes(0);
+                currentDayNow.setSeconds(0);
+                currentDayNow.setMilliseconds(0);
+                return currentDayNow.getTime();
             },
             doOperate() {
                 this.dialogFormVisible = false;
@@ -457,5 +525,8 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    .super_mini_el_selector{
+        width: 100px;
     }
 </style>
