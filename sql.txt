@@ -47,3 +47,39 @@
  `Description`	varchar(2048) COMMENT '备注（产品要求订单要求）',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单信息表'
+
+
+   ALTER TABLE `order_info` ADD COLUMN `YQ` int not null;
+    
+    ALTER TABLE `order_info` ADD COLUMN `DZ` int not null;
+
+   
+    ALTER TABLE `order_info` ADD COLUMN `ZZ` int not null;
+
+  
+    ALTER TABLE `order_info` ADD COLUMN `FZ` int not null;
+
+    
+    ALTER TABLE `order_info` ADD COLUMN `HBJ` int not null;
+
+   
+    ALTER TABLE `order_info` ADD COLUMN `ZC` int not null;
+  
+    ALTER TABLE `order_info` ADD COLUMN `GTTT` int not null;
+
+    ALTER TABLE `order_info` ADD COLUMN `JK` int not null;
+ 
+    ALTER TABLE `order_info` ADD COLUMN `ZZZC` int not null;
+
+    ALTER TABLE `order_info` ADD COLUMN `DZZC` int not null;
+
+   
+    ALTER TABLE `order_info` ADD COLUMN `BZ` int not null;
+
+   
+    ALTER TABLE `order_info` ADD COLUMN `BP` int not null;
+
+ 
+    ALTER TABLE `order_info` ADD COLUMN `SC` int not null;
+
+    ALTER TABLE `order_info` ADD COLUMN `LC` int not null;

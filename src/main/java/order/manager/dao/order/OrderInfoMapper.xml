@@ -4,18 +4,64 @@
 
     <sql id="OrderInfo_allFields">
         Id, ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus
+         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus,
+         YQ,DZ,ZZ,FZ,HBJ,ZC,GTTT,JK,ZZZC,DZZC,BZ,BP,SC,LC
     </sql>
 
     <insert id="insert" parameterType="OrderInfo">
      INSERT INTO order_info(ProductId, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus)
+     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, OrderYear, DeliveryStatus,
+     YQ,DZ,ZZ,FZ,HBJ,ZC,GTTT,JK,ZZZC,DZZC,BZ,BP,SC,LC)
         VALUES( #{productId}, #{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
-         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{orderYear}, #{deliveryStatus})
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{orderYear}, #{deliveryStatus},
+         #{yq},#{dz},#{zz},#{fz},#{hbj},#{zc},#{gttt},#{jk},#{zzzc},#{dzzc},#{bz},#{bp},#{sc},#{lc})
     </insert>
 
     <update id="updateById" parameterType="OrderInfo">
         UPDATE order_info SET
+        <if test="yq != null and yq > 0">
+            YQ = #{yq},
+        </if>
+        <if test="dz != null and dz > 0">
+            DZ = #{dz},
+        </if>
+        <if test="zz != null and zz > 0">
+            ZZ = #{zz},
+        </if>
+        <if test="fz != null and fz > 0">
+            FZ = #{fz},
+        </if>
+        <if test="hbj != null and hbj > 0">
+            HBJ = #{hbj},
+        </if>
+        <if test="zc != null and zc > 0">
+            ZC = #{zc},
+        </if>
+        <if test="gttt != null and gttt > 0">
+            GTTT = #{gttt},
+        </if>
+        <if test="jk != null and jk > 0">
+            JK = #{jk},
+        </if>
+        <if test="zzzc != null and zzzc > 0">
+            ZZZC = #{zzzc},
+        </if>
+        <if test="dzzc != null and dzzc > 0">
+            DZZC = #{dzzc},
+        </if>
+        <if test="bz != null and bz > 0">
+            BZ = #{bz},
+        </if>
+        <if test="bp != null and bp > 0">
+            BP = #{bp},
+        </if>
+        <if test="sc != null and sc > 0">
+            SC = #{sc},
+        </if>
+        <if test="lc != null and lc > 0">
+            LC = #{lc},
+        </if>
+
 
         <if test="customerName != null and customerName != ''">
             CustomerName = #{customerName},
@@ -93,6 +139,49 @@
 
     <sql id="OrderInfo_query_condition">
         <where>
+            <if test="yq != null and yq > 0">
+                AND YQ = #{yq}
+            </if>
+            <if test="dz != null and dz > 0">
+                AND DZ = #{dz}
+            </if>
+            <if test="zz != null and zz > 0">
+                AND ZZ = #{zz}
+            </if>
+            <if test="fz != null and fz > 0">
+                AND FZ = #{fz}
+            </if>
+            <if test="hbj != null and hbj > 0">
+                AND HBJ = #{hbj}
+            </if>
+            <if test="zc != null and zc > 0">
+                AND ZC = #{zc}
+            </if>
+            <if test="gttt != null and gttt > 0">
+                AND GTTT = #{gttt}
+            </if>
+            <if test="jk != null and jk > 0">
+                AND JK = #{jk}
+            </if>
+            <if test="zzzc != null and zzzc > 0">
+                AND ZZZC = #{zzzc}
+            </if>
+            <if test="dzzc != null and dzzc > 0">
+                AND DZZC = #{dzzc}
+            </if>
+            <if test="bz != null and bz > 0">
+                AND BZ = #{bz}
+            </if>
+            <if test="bp != null and bp > 0">
+                AND BP = #{bp}
+            </if>
+            <if test="sc != null and sc > 0">
+                AND SC = #{sc}
+            </if>
+            <if test="lc != null and lc > 0">
+                AND LC = #{lc}
+            </if>
+
             <if test="customerName != null and customerName !=''">
                 AND customerName LIKE CONCAT('%', REPLACE(REPLACE(#{customerName},'%','\%'),'_','\_'), '%')
             </if>
