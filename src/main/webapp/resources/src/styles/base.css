@@ -38,3 +38,6 @@ header::after {
 .container {
   padding-top: 80px;
 }
+.el-main {
+  flex-basis: 0;
+}

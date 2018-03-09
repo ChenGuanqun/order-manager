@@ -48,6 +48,106 @@
                     <el-option label="未交货" value="1"></el-option>
                 </el-select>
             </el-form-item>
+
+            <el-form-item label="油漆:">
+                <el-select class="super_mini_el_selector" v-model="formInline.yq" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="定子:">
+                <el-select class="super_mini_el_selector" v-model="formInline.dz" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="转子:">
+                <el-select class="super_mini_el_selector" v-model="formInline.zz" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="风罩:">
+                <el-select class="super_mini_el_selector" v-model="formInline.fz" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="钢板件:">
+                <el-select class="super_mini_el_selector" v-model="formInline.hbj" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="轴:">
+                <el-select class="super_mini_el_selector" v-model="formInline.zc" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="盖头:">
+                <el-select class="super_mini_el_selector" v-model="formInline.gttt" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="机壳:">
+                <el-select class="super_mini_el_selector" v-model="formInline.jk" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="转子总成:">
+                <el-select class="super_mini_el_selector" v-model="formInline.zzzc" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="定子总成:">
+                <el-select class="super_mini_el_selector" v-model="formInline.dzzc" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="包装:">
+                <el-select class="super_mini_el_selector" v-model="formInline.bz" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="标牌:">
+                <el-select class="super_mini_el_selector" v-model="formInline.bp" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="开关:">
+                <el-select class="super_mini_el_selector" v-model="formInline.sc" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="线缆:">
+                <el-select class="super_mini_el_selector" v-model="formInline.lc" placeholder="请选择">
+                    <el-option label="所有" value="0"></el-option>
+                    <el-option label="完工" value="2"></el-option>
+                    <el-option label="未完工" value="1"></el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
                 <el-button type="primary" @click="handleCreate">创建</el-button>
@@ -128,6 +228,7 @@
 
         <el-table
                 :data="tableData"
+                :row-class-name="tableRowClassName">
                 style="width: 100%">
             <el-table-column
                     prop="orderId"
@@ -266,7 +367,21 @@
                     status: '0',
                     deliveryStatus: '0',
                     deliveryDateRange: [],
-                    orderDateRange:[]
+                    orderDateRange:[],
+                    yq:'0',
+                    dz:'0',
+                    zz:'0',
+                    fz:'0',
+                    hbj:'0',
+                    zc:'0',
+                    gttt:'0',
+                    jk:'0',
+                    zzzc:'0',
+                    dzzc:'0',
+                    bz:'0',
+                    bp:'0',
+                    sc:'0',
+                    lc:'0'
                 },
                 dialogFormVisible: false,
                 form: {
@@ -464,6 +579,17 @@
                 currentDayNow.setMilliseconds(0);
                 return currentDayNow.getTime();
             },
+            tableRowClassName({row, rowIndex}) {
+//                console.info(row)
+                if (row.deliveryStatus === 2) {
+                    return 'delivery-row';
+                }
+                if (row.status === 2) {
+                    return 'done-row';
+                }
+
+                return '';
+            },
             doOperate() {
                 this.dialogFormVisible = false;
                 if (!this.isEdit) {
@@ -528,5 +654,12 @@
     }
     .super_mini_el_selector{
         width: 100px;
+    }
+    .el-table .done-row {
+        background: oldlace;
+    }
+
+    .el-table .delivery-row {
+        background: #f0f9eb;
     }
 </style>
