@@ -63,7 +63,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'login.html',
       template: 'login.html',
       inject: true,
-      excludeChunks: ['app', 'vendor']
+      excludeChunks: ['app']
     }),
     // copy custom static assets
     new CopyWebpackPlugin([
