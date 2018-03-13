@@ -3,6 +3,186 @@
 <head>
   <meta charset=utf-8>
   <title>任务管理界面</title>
+  <style>
+    /*
+    *------------------------------
+    *  login style
+    *------------------------------
+    */
+    .lg_hd {
+      height: 70px;
+    }
+
+    .lg_bd {
+      background-color: #354052;
+    }
+
+    .login {
+      padding: 200px 0;
+    }
+
+    .loginbox {
+      width: 550px;
+      min-height: 400px;
+      margin: 0 auto;
+    }
+
+    .loginbox .lbhd {
+      font: 24px/60px '微软雅黑';
+      height: 60px;
+      text-align: center;
+      color: #fff;
+      border-radius: 4px 4px 0 0;
+      background-color: #1496d4;
+    }
+
+    .loginbox .lbbd {
+      padding: 0 77px;
+      border-radius: 0 0 4px 4px;
+      background-color: #fff;
+    }
+
+    .u-input2 {
+      position: relative;
+    }
+
+    .u-input2 label {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 45px;
+    }
+
+    .u-input2 input {
+      font: 20px/49px 'Microsoft YaHei';
+      width: 341px;
+      height: 49px;
+      padding-left: 53px;
+      color: #aaa;
+      border: 1px solid #e2e2e2;
+    }
+
+    .login_note {
+      text-align: right;
+    }
+
+    .login_note > a {
+      font-family: 'Microsoft YaHei';
+      color: #646566;
+    }
+
+    .u-btn2 {
+      font-family: 'Microsoft YaHei';
+      font-size: 24px;
+      display: block;
+      width: 100%;
+      height: 52px;
+      border-radius: 4px;
+      color: #fff;
+      border: none;
+    }
+
+    .u-btn2.active,
+    .u-btn2:hover,
+    .u-btn2:active {
+      border: 1px solid #3b89cf;
+    }
+
+    .u-btn2:hover,
+    .u-btn2.active {
+      background: #2daae6;
+      background: -webkit-linear-gradient(top, #43bcf5, #1597d5);
+      background: -ms-linear-gradient(top, #43bcf5, #1597d5);
+      background: -o-linear-gradient(top, #43bcf5, #1597d5);
+      background: linear-gradient(top, #43bcf5, #1597d5);
+    }
+
+    .u-btn2:active {
+      background: #1491cd;
+      background: -webkit-linear-gradient(top, #21a5e3, #097fba);
+      background: -ms-linear-gradient(top, #21a5e3, #097fba);
+      background: -o-linear-gradient(top, #21a5e3, #097fba);
+      background: linear-gradient(top, #21a5e3, #097fba);
+    }
+
+    .u-btn2[disabled],
+    .u-btn2[disabled]:hover,
+    .u-btn2[disabled]:active {
+      background: #dedede;
+      border: none;
+      cursor: default;
+    }
+
+    .m-form2 {
+      padding-top: 15px;
+    }
+
+    .m-form2 .u-input2 {
+      margin-top: 18px;
+    }
+
+    .m-form2 .login_note {
+      padding: 14px 0;
+    }
+
+    .m-form2 .login_btn {
+      padding: 14px 0 5px 0;
+    }
+
+    .m-form2 .lg_icon {
+      background: url(../res/login_icon.png) no-repeat -9999px;
+    }
+
+    .m-form2 .lg_icon_1 {
+      background-position: 13px 14px;
+    }
+
+    .m-form2 .lg_icon_2 {
+      background-position: -38px 13px;
+    }
+
+    .lg_ft {
+      padding: 40px 0;
+      font-size: 0;
+      text-align: center;
+    }
+
+    .lg_ft a,
+    .lg_ft span {
+      font: 12px/1 'arial', 'simsun';
+      color: #a6a7a9;
+    }
+
+    .lg_ft .split {
+      padding: 0 12px;
+    }
+
+    .lg_ft .company {
+      padding-left: 27px;
+    }
+
+    .errtip {
+      display: none;
+      padding-top: 10px;
+      color: #fe644c;
+      text-indent: 10px;
+    }
+
+    .logo {
+      float: left;
+      overflow: hidden;
+    }
+
+    .logo > a {
+      float: left;
+      padding: 7px 10px 0 20px;
+    }
+
+    .logo img {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 <div class="login">
@@ -38,184 +218,4 @@
   </div>
 </div>
 </body>
-<style>
-/*
-*------------------------------
-*  login style
-*------------------------------
-*/
-.lg_hd {
-height: 70px;
-}
-
-.lg_bd {
-background-color: #354052;
-}
-
-.login {
-padding: 200px 0;
-}
-
-.loginbox {
-width: 550px;
-min-height: 400px;
-margin: 0 auto;
-}
-
-.loginbox .lbhd {
-font: 24px/60px '微软雅黑';
-height: 60px;
-text-align: center;
-color: #fff;
-border-radius: 4px 4px 0 0;
-background-color: #1496d4;
-}
-
-.loginbox .lbbd {
-padding: 0 77px;
-border-radius: 0 0 4px 4px;
-background-color: #fff;
-}
-
-.u-input2 {
-position: relative;
-}
-
-.u-input2 label {
-position: absolute;
-top: 0;
-bottom: 0;
-left: 0;
-width: 45px;
-}
-
-.u-input2 input {
-font: 20px/49px 'Microsoft YaHei';
-width: 341px;
-height: 49px;
-padding-left: 53px;
-color: #aaa;
-border: 1px solid #e2e2e2;
-}
-
-.login_note {
-text-align: right;
-}
-
-.login_note > a {
-font-family: 'Microsoft YaHei';
-color: #646566;
-}
-
-.u-btn2 {
-font-family: 'Microsoft YaHei';
-font-size: 24px;
-display: block;
-width: 100%;
-height: 52px;
-border-radius: 4px;
-color: #fff;
-border: none;
-}
-
-.u-btn2.active,
-.u-btn2:hover,
-.u-btn2:active {
-border: 1px solid #3b89cf;
-}
-
-.u-btn2:hover,
-.u-btn2.active {
-background: #2daae6;
-background: -webkit-linear-gradient(top, #43bcf5, #1597d5);
-background: -ms-linear-gradient(top, #43bcf5, #1597d5);
-background: -o-linear-gradient(top, #43bcf5, #1597d5);
-background: linear-gradient(top, #43bcf5, #1597d5);
-}
-
-.u-btn2:active {
-background: #1491cd;
-background: -webkit-linear-gradient(top, #21a5e3, #097fba);
-background: -ms-linear-gradient(top, #21a5e3, #097fba);
-background: -o-linear-gradient(top, #21a5e3, #097fba);
-background: linear-gradient(top, #21a5e3, #097fba);
-}
-
-.u-btn2[disabled],
-.u-btn2[disabled]:hover,
-.u-btn2[disabled]:active {
-background: #dedede;
-border: none;
-cursor: default;
-}
-
-.m-form2 {
-padding-top: 15px;
-}
-
-.m-form2 .u-input2 {
-margin-top: 18px;
-}
-
-.m-form2 .login_note {
-padding: 14px 0;
-}
-
-.m-form2 .login_btn {
-padding: 14px 0 5px 0;
-}
-
-.m-form2 .lg_icon {
-background: url(../res/login_icon.png) no-repeat -9999px;
-}
-
-.m-form2 .lg_icon_1 {
-background-position: 13px 14px;
-}
-
-.m-form2 .lg_icon_2 {
-background-position: -38px 13px;
-}
-
-.lg_ft {
-padding: 40px 0;
-font-size: 0;
-text-align: center;
-}
-
-.lg_ft a,
-.lg_ft span {
-font: 12px/1 'arial', 'simsun';
-color: #a6a7a9;
-}
-
-.lg_ft .split {
-padding: 0 12px;
-}
-
-.lg_ft .company {
-padding-left: 27px;
-}
-
-.errtip {
-display: none;
-padding-top: 10px;
-color: #fe644c;
-text-indent: 10px;
-}
-
-.logo {
-float: left;
-overflow: hidden;
-}
-
-.logo > a {
-float: left;
-padding: 7px 10px 0 20px;
-}
-
-.logo img {
-display: block;
-}
-</style>
 </html>
