@@ -6,6 +6,7 @@ import router from './router'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './styles/base.css'
+import 'babel-polyfill'
 
 
 Vue.use(Element, { size: 'medium' })
