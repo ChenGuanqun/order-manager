@@ -233,49 +233,49 @@
             <el-table-column
                     prop="orderId"
                     label="生产序号"
-                    width="90">
+                    >
             </el-table-column>
             <el-table-column
                     prop="customerName"
                     label="客户名称"
-                    width="100">
+                    >
             </el-table-column>
             <el-table-column
                     prop="productName"
                     label="产品名称"
-                    width="160">
+                    >
             </el-table-column>
             <el-table-column
                     prop="productSeries"
                     label="产品型号"
-                    width="100">
+                    >
             </el-table-column>
             <el-table-column
                     prop="number"
                     label="数量"
-                    width="60">
+                   >
             </el-table-column>
             <el-table-column
                     prop="deliveryDate"
                     label="交货时间"
                     :formatter="dateFormatter"
-                    width="100">
+                    >
             </el-table-column>
             <el-table-column
                     prop="orderDate"
                     label="订单时间"
                     :formatter="dateFormatter"
-                    width="100">
+                    >
             </el-table-column>
             <el-table-column
                     prop="planDate"
                     label="计划时间"
                     :formatter="dateFormatter"
-                    width="100">
+                    >
             </el-table-column>
             <el-table-column
                     label="产品要求"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <el-tooltip :content="scope.row.description" placement="top">
                         <span class="description_limit">{{scope.row.description}}</span>
@@ -286,7 +286,8 @@
             <el-table-column
                     prop="properties"
                     label="配件一览"
-                    width="493">
+                    v-if="false"
+                    width="493px">
                 <template slot-scope="scope">
                     <el-checkbox-group v-model="scope.row.configArray" @change="configChange(scope.row)">
                         <el-checkbox label="油漆"></el-checkbox>
@@ -308,7 +309,7 @@
             </el-table-column>
             <el-table-column
                     label="完工"
-                    width='60'>
+                    >
                 <template slot-scope="scope">
                     <el-switch
                             v-model="scope.row.status"
@@ -321,7 +322,7 @@
             </el-table-column>
             <el-table-column
                     label="交货"
-                    width='60'>
+                    >
                 <template slot-scope="scope">
                     <el-switch
                             v-model="scope.row.deliveryStatus"
