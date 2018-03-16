@@ -25,6 +25,11 @@
                             用户管理
                         </el-menu-item>
                     </router-link>
+                  <router-link to="/roles">
+                    <el-menu-item index="3">
+                      权限管理
+                    </el-menu-item>
+                  </router-link>
                 </el-menu>
             </el-aside>
             <el-main class="content">

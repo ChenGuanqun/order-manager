@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order.manager.dao.role.RoleInfoMapper">
+
+    <sql id="RoleInfo_allFields">
+        Id, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
+         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate
+    </sql>
+
+    <insert id="insert" parameterType="RoleInfo">
+     INSERT INTO role(ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
+     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate)
+        VALUES(#{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{deliveryStatus}, #{roleName}, #{operate})
+    </insert>
+
+    <update id="updateById" parameterType="RoleInfo">
+        UPDATE role SET
+        OrderId = #{orderId},
+        CustomerName = #{customerName},
+        Config = #{config},
+        productName = #{productName},
+        ProductSeries = #{productSeries},
+        Number = #{number},
+        DeliveryDate = #{deliveryDate},
+        OrderDate = #{orderDate},
+        PlanDate = #{planDate},
+        Status = #{status},
+        DeliveryStatus = #{deliveryStatus},
+        Operate = #{operate},
+        <if test="roleName != null and roleName != ''">
+            RoleName = #{roleName},
+        </if>
+        <if test="lastOperator != null">
+            LastOperator = #{lastOperator},
+        </if>
+
+        <if test="description != null">
+            Description = #{description},
+        </if>
+
+        LastModifyTime = #{lastModifyTime}
+        WHERE Id = #{id}
+    </update>
+
+    <select id="getById" parameterType="Long" resultType="RoleInfo">
+        SELECT
+        <include refid="RoleInfo_allFields"/>
+        FROM role
+        <where>
+            Id = #{id}
+        </where>
+    </select>
+    
+
+    <sql id="RoleInfo_query_condition">
+        <where>
+        </where>
+    </sql>
+
+
+    <select id="queryCount" parameterType="RoleInfoQuery" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM role
+        <include refid="RoleInfo_query_condition"></include>
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM role WHERE Id = #{id}
+    </delete>
+
+    <select id="queryList" parameterType="RoleInfoQuery" resultType="RoleInfo">
+        SELECT
+        <include refid="RoleInfo_allFields"/>
+        FROM role
+        <include refid="RoleInfo_query_condition"></include>
+        ORDER BY OrderId DESC
+        <if test="limit > -1">
+            LIMIT #{limit}
+        </if>
+        <if test="offset > -1">
+            OFFSET #{offset}
+        </if>
+    </select>
+</mapper>

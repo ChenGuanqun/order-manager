@@ -48,7 +48,6 @@
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单信息表'
 
-
    ALTER TABLE `order_info` ADD COLUMN `YQ` int not null;
     
     ALTER TABLE `order_info` ADD COLUMN `DZ` int not null;
@@ -83,3 +82,28 @@
     ALTER TABLE `order_info` ADD COLUMN `SC` int not null;
 
     ALTER TABLE `order_info` ADD COLUMN `LC` int not null;
+	
+CREATE TABLE `role` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `RoleName` varchar(64) NOT NULL,
+  `OrderId` boolean  COMMENT '产品序列按年度1开始',
+  `OrderYear` boolean  COMMENT '产品年度',
+  `CustomerName` boolean  comment '客户名称',
+  `ProductName` boolean  comment '产品名称',
+  `ProductSeries` boolean  comment '产品型号',
+  `Number` boolean comment '产品数量',
+  `DeliveryDate` boolean comment '交货日期',
+  `OrderDate` boolean comment '下单日期',
+  `PlanDate` boolean comment '计划日期',
+  `Status` boolean  comment '订单状态 1未完成 2已完成',
+  `DeliveryStatus` boolean  comment '交货状态 1未交货 2已交货',
+  `Config` boolean COMMENT '配件一栏配置',
+  `Operate` boolean COMMENT '是否能够操作',
+  `Creator`	varchar(256) COMMENT '创建者',
+ `InsertTime`	bigint COMMENT '创建时间',
+ `LastOperator`	varchar(256) COMMENT '最后操作人',
+ `LastModifyTime`	bigint	COMMENT '最后操作时间',
+ `Description`	varchar(256) COMMENT '备注',
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IDX_RoleName` (`RoleName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户权限角色'
