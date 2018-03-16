@@ -232,50 +232,58 @@
                 style="width: 100%">
             <el-table-column
                     prop="orderId"
+                    v-if="access.orderId"
                     label="生产序号"
                     >
             </el-table-column>
             <el-table-column
                     prop="customerName"
+                    v-if="access.customerName"
                     label="客户名称"
                     >
             </el-table-column>
             <el-table-column
                     prop="productName"
+                    v-if="access.productName"
                     label="产品名称"
                     >
             </el-table-column>
             <el-table-column
                     prop="productSeries"
+                    v-if="access.productSeries"
                     label="产品型号"
                     >
             </el-table-column>
             <el-table-column
                     prop="number"
+                    v-if="access.number"
                     label="数量"
                    >
             </el-table-column>
             <el-table-column
                     prop="deliveryDate"
+                    v-if="access.deliveryDate"
                     label="交货时间"
                     :formatter="dateFormatter"
                     >
             </el-table-column>
             <el-table-column
                     prop="orderDate"
+                    v-if="access.orderDate"
                     label="订单时间"
                     :formatter="dateFormatter"
                     >
             </el-table-column>
             <el-table-column
                     prop="planDate"
+                    v-if="access.planDate"
                     label="计划时间"
                     :formatter="dateFormatter"
                     >
             </el-table-column>
             <el-table-column
                     label="产品要求"
-                    >
+            >
                 <template slot-scope="scope">
                     <el-tooltip :content="scope.row.description" placement="top">
                         <span class="description_limit">{{scope.row.description}}</span>
@@ -285,8 +293,8 @@
 
             <el-table-column
                     prop="properties"
+                    v-if="access.config"
                     label="配件一览"
-                    v-if="false"
                     width="493px">
                 <template slot-scope="scope">
                     <el-checkbox-group v-model="scope.row.configArray" @change="configChange(scope.row)">
@@ -308,7 +316,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="完工"
+              v-if="access.status"
+              label="完工"
                     >
                 <template slot-scope="scope">
                     <el-switch
@@ -321,7 +330,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="交货"
+              v-if="access.deliveryStatus"
+              label="交货"
                     >
                 <template slot-scope="scope">
                     <el-switch
@@ -333,7 +343,7 @@
                     </el-switch>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="100">
+            <el-table-column label="操作" width="100"  v-if="access.operate">
                 <template slot-scope="scope">
                     <el-button @click="handleEdit(scope.row)" type="text" size="mini">编辑</el-button>
                     <el-button @click="handleDelete(scope.row)" type="text" size="mini">删除</el-button>
@@ -397,11 +407,32 @@
                 },
                 isEdit: false,
                 totalCount:0,
-                currentPage:1
+                currentPage:1,
+                access:{
+                  customerName:false,
+                  productName:false,
+                  productSeries:false,
+                  number:false,
+                  deliveryDate:false,
+                  orderDate:false,
+                  planDate:false,
+                  status:false,
+                  deliveryStatus:false,
+                  config:false,
+                  orderId:true,
+                  operate:false
+                }
             }
         },
         created() {
-            this.fetchAllOrders({pageNum:this.currentPage});
+          request.getRole().then(res => {
+            if(res.data.code == 200) {
+             this.access = res.data.result;
+             this.fetchAllOrders({pageNum:this.currentPage});
+            }
+          }).catch(err => {
+            // 处理请求错误的情况
+          })
         },
         methods: {
             dateFormatter(row, col, value) {

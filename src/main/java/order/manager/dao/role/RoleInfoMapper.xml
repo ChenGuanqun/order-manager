@@ -51,10 +51,14 @@
             Id = #{id}
         </where>
     </select>
-    
+
 
     <sql id="RoleInfo_query_condition">
         <where>
+
+            <if test="roleName !=null and roleName != ''">
+            AND RoleName = #{roleName}
+            </if>
         </where>
     </sql>
 

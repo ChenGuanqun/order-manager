@@ -3,12 +3,13 @@
 <mapper namespace="order.manager.dao.user.UserInfoMapper">
 
     <sql id="UserInfo_allFields">
-        Id, UserName, Password, Status, SecurityRole, Creator, InsertTime, LastOperator, LastModifyTime, Description
+        Id, UserName, Password, Status, SecurityRole, Creator, InsertTime, LastOperator, LastModifyTime, Description, RoleName
     </sql>
 
     <insert id="insert" parameterType="UserInfo">
-        INSERT INTO user(UserName, Password, Status, SecurityRole, Creator, InsertTime, LastOperator, LastModifyTime, Description)
-        VALUES( #{userName}, #{password}, #{status}, #{securityRole}, #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description})
+        INSERT INTO user(UserName, Password, Status, SecurityRole, Creator, InsertTime, LastOperator, LastModifyTime, Description, RoleName)
+        VALUES( #{userName}, #{password}, #{status}, #{securityRole}, #{creator}, #{insertTime}, #{lastOperator},
+         #{lastModifyTime}, #{description}, #{roleName})
     </insert>
 
     <update id="updateById" parameterType="UserInfo">
@@ -31,6 +32,10 @@
 
         <if test="description != null">
             Description = #{description},
+        </if>
+
+        <if test="roleName != null and roleName != ''">
+            RoleName = #{roleName},
         </if>
 
         LastModifyTime = #{lastModifyTime}
@@ -78,5 +83,13 @@
         <if test="offset > -1">
             OFFSET #{offset}
         </if>
+    </select>
+
+
+    <select id="getByName" parameterType="String" resultType="UserInfo">
+        SELECT
+        <include refid="UserInfo_allFields"/>
+        FROM user
+        WHERE UserName = #{userName}
     </select>
 </mapper>

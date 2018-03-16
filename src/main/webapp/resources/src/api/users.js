@@ -11,6 +11,7 @@ export default {
     createUser(params) {
         return ajax.post('/api/user/create', {
             userName: params.userName,
+            roleName:params.roleName,
             description: params.description
         })
     },
@@ -25,11 +26,18 @@ export default {
         return ajax.post('/api/user/update', {
             id: params.id,
             status: params.status,
+            roleName:params.roleName,
             description: params.description
         })
     },
 
     getCurrentUserName() {
         return ajax.post('/api/user/queryCurrentUserName')
-    }
+    },
+    queryRoles () {
+    return ajax.post('/api/role/query', {
+      pageNum:1,
+      pageSize:30
+    })
+  }
 }

@@ -70,4 +70,9 @@ public class UserInfoServiceImpl implements UserInfoService{
     public int queryCount(UserInfoQuery query) {
         return userInfoDAO.queryCount(query);
     }
+
+    @Override
+    public UserInfo getByName(String userName) {
+        return userInfoDAO.getByName(userName);
+    }
 }

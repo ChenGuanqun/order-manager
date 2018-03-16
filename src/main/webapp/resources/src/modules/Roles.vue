@@ -16,112 +16,78 @@
 
 
         <el-form :model="form">
-          <el-form-item label="生产序号" label-width='80px'>
             <el-switch
               v-model="form.orderId"
               :width='40'
-              >
+              active-text="生产序号"
+            >
             </el-switch>
-          </el-form-item>
-          <el-form-item label="客户名称" label-width='80px'>
             <el-switch
               v-model="form.customerName"
               :width='40'
+              active-text="客户名称"
             >
             </el-switch>
-          </el-form-item>
-        </el-form>
-
-
-        <el-form :model="form">
-          <el-form-item label="产品名称" label-width='80px'>
-            <el-switch
-              v-model="form.productName"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="产品型号" label-width='80px'>
-            <el-switch
-              v-model="form.productSeries"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="数量" label-width='80px'>
-            <el-switch
-              v-model="form.number"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="交货时间" label-width='80px'>
-            <el-switch
-              v-model="form.deliveryDate"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="订单时间" label-width='80px'>
-            <el-switch
-              v-model="form.orderDate"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="计划时间" label-width='80px'>
-            <el-switch
-              v-model="form.planDate"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="配件一览" label-width='80px'>
-            <el-switch
-              v-model="form.config"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="完工" label-width='80px'>
-            <el-switch
-              v-model="form.status"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="交货" label-width='80px'>
-            <el-switch
-              v-model="form.deliveryStatus"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
-        </el-form>
-        <el-form :model="form">
-          <el-form-item label="操作" label-width='80px'>
-            <el-switch
-              v-model="form.operate"
-              :width='40'
-            >
-            </el-switch>
-          </el-form-item>
+          <el-switch
+            v-model="form.productName"
+            :width='40'
+            active-text="产品名称"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.productSeries"
+            :width='40'
+            active-text="产品型号"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.number"
+            :width='40'
+            active-text="数量"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.deliveryDate"
+            :width='40'
+            active-text="交货时间"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.orderDate"
+            :width='40'
+            active-text="订单时间"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.planDate"
+            :width='40'
+            active-text="计划时间"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.config"
+            :width='40'
+            active-text="配件一览"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.status"
+            :width='40'
+            active-text="完工"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.deliveryStatus"
+            :width='40'
+            active-text="交货"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.operate"
+            :width='40'
+            active-text="操作"
+          >
+          </el-switch>
         </el-form>
 
         <el-form :model="form">
@@ -249,11 +215,24 @@
               })
             }else {
               //编辑用户
-
+              request.updateRole(this.form).then(res => {
+                if(res.data.code == 200 && res.data.result){
+                  this.$message({
+                    message: '更新成功!',
+                    type: 'success'
+                  });
+                  this.fetchAllRoles({});
+                } else {
+                  this.$message.error('更新失败:' + res.data.msg);
+                }
+              }).catch(err => {
+                // 处理请求错误的情况
+              })
             }
           },
           handleEdit(row) {
             this.$_currentEditRole = row;
+            this.form.id = this.$_currentEditRole.id;
             this.form.roleName = this.$_currentEditRole.roleName;
             this.form.customerName = this.$_currentEditRole.customerName;
             this.form.productName = this.$_currentEditRole.productName;
@@ -272,6 +251,22 @@
             this.form.description = this.$_currentEditRole.description;
             this.dialogFormVisible = true ;
             this.isEdit = true;
+          },
+          handleDelete(row) {
+            request.deleteRole(row).then(res => {
+              if(res.data.code == 200 && res.data.result){
+                this.$message({
+                  message: '删除权限:"' + row.roleName+ '"成功!',
+                  type: 'success'
+                });
+                this.fetchAllRoles();
+              } else {
+                this.$message.error('删除权限:"' + row.roleName+ '"失败!');
+              }
+            }).catch(err => {
+              // 处理请求错误的情况
+            })
+
           },
             fetchAllRoles() {
               request.queryRoles().then(res => {

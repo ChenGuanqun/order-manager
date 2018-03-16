@@ -2,6 +2,7 @@ package order.manager.api;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import order.manager.constant.ApiResponse;
 import order.manager.constant.DataListResult;
 import order.manager.dao.order.OrderInfo;
@@ -9,7 +10,12 @@ import order.manager.dao.order.OrderInfoQuery;
 import order.manager.dao.role.RoleInfo;
 import order.manager.dao.role.RoleInfoQuery;
 import order.manager.dao.role.RoleInfoService;
+import order.manager.dao.user.UserInfo;
+import order.manager.dao.user.UserInfoQuery;
+import order.manager.dao.user.UserInfoService;
 import order.manager.exception.ServiceException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +34,9 @@ import java.util.List;
 public class RoleInfoApi extends AbstractApi {
 
     private Gson gson = new Gson();
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @Resource
     private RoleInfoService roleInfoService;
@@ -59,5 +68,48 @@ public class RoleInfoApi extends AbstractApi {
         result.setData(data);
         return new ApiResponse<>(result);
 
+    }
+
+
+    @RequestMapping(value = "/getRole", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<RoleInfo> getRole() throws Exception {
+        String userName = getOperatorFromContext();
+        UserInfo userInfo = userInfoService.getByName(userName);
+        RoleInfo result = null;
+        if(userInfo != null) {
+            RoleInfoQuery query = new RoleInfoQuery();
+            query.setRoleName(userInfo.getRoleName());
+            List<RoleInfo> roles = roleInfoService.queryList(query);
+            if (CollectionUtils.isNotEmpty(roles)) {
+                result = roles.get(0);
+            } else {
+                result = getRoleInfo();
+            }
+        } else {
+            result = getRoleInfo();
+        }
+
+        return new ApiResponse<>(result);
+    }
+
+    private RoleInfo getRoleInfo() {
+        RoleInfo result;
+        result = new RoleInfo();
+        result.setOrderId(true);
+        result.setCustomerName(true);
+        result.setProductName(true);
+        result.setProductSeries(true);
+        return result;
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<Boolean> deleteUser(@RequestBody RoleInfo roleInfo) throws ServiceException {
+
+        Long id = roleInfo.getId();
+        Validate.isTrue(id != null && id > 0, "id不合法");
+        boolean ret = roleInfoService.deleteById(id);
+        return new ApiResponse<>(ret);
     }
 }

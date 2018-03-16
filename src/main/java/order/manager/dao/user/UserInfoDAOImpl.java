@@ -23,4 +23,10 @@ public class UserInfoDAOImpl extends BaseDaoImpl<UserInfo> implements UserInfoDA
     public int queryCount(UserInfoQuery query) {
         return getSqlSessionTemplate().selectOne(getNameSpace() + "queryCount", query);
     }
+
+    @Override
+    public UserInfo getByName(String userName) {
+        return getSqlSessionTemplate().selectOne(getNameSpace() + "getByName", userName);
+
+    }
 }

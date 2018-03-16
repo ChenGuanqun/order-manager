@@ -14,4 +14,6 @@ public interface UserInfoDAO extends BaseDao<UserInfo> {
     List<UserInfo> queryList(UserInfoQuery query);
 
     int queryCount(UserInfoQuery query);
+
+    UserInfo getByName(String userName);
 }

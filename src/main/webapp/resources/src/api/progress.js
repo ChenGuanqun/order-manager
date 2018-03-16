@@ -70,5 +70,9 @@ export default {
             planDate: params.planDate,
             description: params.description
         })
-    }
+    },
+  getRole () {
+    return ajax.post('/api/role/getRole')
+  }
+
 }

@@ -20,11 +20,17 @@
                 </el-form-item>
             </el-form>
 
-            <el-form :model="form">
-                <el-form-item label="权限" label-width='80px'>
-                    <el-input v-model="form.securityRole" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
+          <el-form :model="form">
+            <el-form-item label="权限" label-width='80px'>
+              <el-select  v-model="form.roleName" placeholder="请选择">
+                <el-option v-for="role in roles"
+                  :value="role.roleName"
+                  :key="role.roleName"
+                   :label="role.roleName"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
 
             <el-form :model="form">
                 <el-form-item label="备注" label-width='80px'>
@@ -46,7 +52,7 @@
                     label="姓名">
             </el-table-column>
             <el-table-column
-                    prop="securityRole"
+                    prop="roleName"
                     label="权限">
             </el-table-column>
             <el-table-column
@@ -104,13 +110,16 @@
                     userName: '',
                     description: '',
                     //todo 用户权限
-                    securityRole:0
+                    securityRole:0,
+                  roleName:''
                 },
-                isEdit: false
+                isEdit: false,
+              roles:[]
             };
         },
         created() {
             this.fetchAllUsers({});
+            this.fetchRoles();
         },
         methods: {
             dateFormatter(row, col, value) {
@@ -140,14 +149,17 @@
                 this.dialogFormVisible = false;
                 this.form = {
                     userName: '',
-                    description: ''
+                    description: '',
+                  roleName:''
+
                 }
             },
 
             handleCreate(){
                 this.form = {
                     userName: '',
-                    description: ''
+                    description: '',
+                  roleName:''
                 }
                 this.dialogFormVisible = true;
                 this.isEdit = false;
@@ -171,7 +183,7 @@
                     })
                 }else {
                     //编辑用户
-                    request.updateUser({id:this.$_currentEditUser.id, description:this.form.description}).then(res => {
+                    request.updateUser({id:this.$_currentEditUser.id, roleName:this.form.roleName, description:this.form.description}).then(res => {
                         if(res.data.code == 200 && res.data.result){
                             this.$message({
                                 message: '用户信息更新成功!',
@@ -190,6 +202,7 @@
                 this.$_currentEditUser = row;
                 this.form.userName = this.$_currentEditUser.userName;
                 this.form.description = this.$_currentEditUser.description;
+                this.form.roleName = this.$_currentEditUser.roleName;
                 this.dialogFormVisible = true ;
                 this.isEdit = true;
             },
@@ -209,6 +222,16 @@
                 })
 
             },
+      fetchRoles() {
+        request.queryRoles().then(res => {
+          if(res.data.code == 200) {
+            this.roles = res.data.result.data;
+            console.info(this.roles);
+          }
+        }).catch(err => {
+          // 处理请求错误的情况
+        })
+      },
             handleResetKey(row) {
                 //todo
                 console.info(row)

@@ -14,4 +14,5 @@ public class UserInfo extends BaseBean{
     private String password;
     private Integer status;
     private Integer securityRole;
+    private String roleName;
 }

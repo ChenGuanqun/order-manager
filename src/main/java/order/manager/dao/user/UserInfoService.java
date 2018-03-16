@@ -21,4 +21,6 @@ public interface UserInfoService {
     List<UserInfo> queryList(UserInfoQuery query);
 
     int queryCount(UserInfoQuery query);
+
+    UserInfo getByName(String userName);
 }
