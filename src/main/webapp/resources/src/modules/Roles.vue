@@ -14,24 +14,113 @@
           </el-form-item>
         </el-form>
 
+
         <el-form :model="form">
-          <el-form-item label="权限" label-width='80px'>
-            <el-checkbox-group v-model="form.roleArray">
-              <el-checkbox label="生产序号"></el-checkbox>
-              <el-checkbox label="客户名称"></el-checkbox>
-              <el-checkbox label="产品名称"></el-checkbox>
-              <el-checkbox label="产品型号"></el-checkbox>
-              <el-checkbox label="数量"></el-checkbox>
-              <el-checkbox label="交货时间"></el-checkbox>
-              <el-checkbox label="订单时间"></el-checkbox>
-              <el-checkbox label="计划时间"></el-checkbox>
-              <el-checkbox label="产品要求"></el-checkbox>
-              <el-checkbox label="定子总成"></el-checkbox>
-              <el-checkbox label="配件一览"></el-checkbox>
-              <el-checkbox label="完工"></el-checkbox>
-              <el-checkbox label="交货"></el-checkbox>
-              <el-checkbox label="操作"></el-checkbox>
-            </el-checkbox-group>
+          <el-form-item label="生产序号" label-width='80px'>
+            <el-switch
+              v-model="form.orderId"
+              :width='40'
+              >
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="客户名称" label-width='80px'>
+            <el-switch
+              v-model="form.customerName"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+
+
+        <el-form :model="form">
+          <el-form-item label="产品名称" label-width='80px'>
+            <el-switch
+              v-model="form.productName"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="产品型号" label-width='80px'>
+            <el-switch
+              v-model="form.productSeries"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="数量" label-width='80px'>
+            <el-switch
+              v-model="form.number"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="交货时间" label-width='80px'>
+            <el-switch
+              v-model="form.deliveryDate"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="订单时间" label-width='80px'>
+            <el-switch
+              v-model="form.orderDate"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="计划时间" label-width='80px'>
+            <el-switch
+              v-model="form.planDate"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="配件一览" label-width='80px'>
+            <el-switch
+              v-model="form.config"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="完工" label-width='80px'>
+            <el-switch
+              v-model="form.status"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="交货" label-width='80px'>
+            <el-switch
+              v-model="form.deliveryStatus"
+              :width='40'
+            >
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form">
+          <el-form-item label="操作" label-width='80px'>
+            <el-switch
+              v-model="form.operate"
+              :width='40'
+            >
+            </el-switch>
           </el-form-item>
         </el-form>
 
@@ -86,13 +175,23 @@
         name: "roles",
         data() {
             return {
-                tableData: [],
+              tableData: [],
               dialogFormVisible: false,
               form: {
                 roleName: '',
                 description: '',
-                orderId:true,
-                roleArray:[]
+                customerName:false,
+                productName:false,
+                productSeries:false,
+                number:false,
+                deliveryDate:false,
+                orderDate:false,
+                planDate:false,
+                status:false,
+                deliveryStatus:false,
+                config:false,
+                orderId:false,
+                operate:false
               },
               isEdit:false
             };
@@ -106,15 +205,27 @@
           },
           closeDialog() {
             this.dialogFormVisible = false;
-            this.form = {
-              roleName: '',
-              description: ''
-            }
+//            this.form = {
+//              roleName: '',
+//              description: ''
+//            }
           },
           handleCreate(){
             this.form = {
               roleName: '',
-              description: ''
+              description: '',
+              customerName:false,
+              productName:false,
+              productSeries:false,
+              number:false,
+              deliveryDate:false,
+              orderDate:false,
+              planDate:false,
+              status:false,
+              deliveryStatus:false,
+              config:false,
+              orderId:false,
+              operate:false
             }
             this.dialogFormVisible = true;
             this.isEdit = false;
@@ -144,7 +255,20 @@
           handleEdit(row) {
             this.$_currentEditRole = row;
             this.form.roleName = this.$_currentEditRole.roleName;
+            this.form.customerName = this.$_currentEditRole.customerName;
+            this.form.productName = this.$_currentEditRole.productName;
+            this.form.productSeries = this.$_currentEditRole.productSeries;
+            this.form.number = this.$_currentEditRole.number;
+            this.form.deliveryDate = this.$_currentEditRole.deliveryDate;
+            this.form.orderDate = this.$_currentEditRole.orderDate;
+            this.form.planDate = this.$_currentEditRole.planDate;
+            this.form.status = this.$_currentEditRole.status;
+            this.form.deliveryStatus = this.$_currentEditRole.deliveryStatus;
+            this.form.config = this.$_currentEditRole.config;
             this.form.orderId = this.$_currentEditRole.orderId;
+            this.form.operate = this.$_currentEditRole.operate;
+
+
             this.form.description = this.$_currentEditRole.description;
             this.dialogFormVisible = true ;
             this.isEdit = true;
