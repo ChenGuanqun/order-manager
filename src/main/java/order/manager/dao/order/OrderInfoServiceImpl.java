@@ -1,7 +1,10 @@
 package order.manager.dao.order;
 
+import order.manager.exception.ServiceException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
@@ -20,6 +23,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Resource
     private OrderInfoDAO orderInfoDAO;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean insertBatch(List<OrderInfo> list, String operator) throws ServiceException {
+        if(CollectionUtils.isNotEmpty(list)) {
+          for(OrderInfo orderInfo : list) {
+              if(!insert(orderInfo, operator)) {
+                  throw new ServiceException("后台异常");
+              }
+          }
+        }
+
+        return true;
+    }
 
     @Override
     public boolean insert(OrderInfo orderInfo, String operator) {

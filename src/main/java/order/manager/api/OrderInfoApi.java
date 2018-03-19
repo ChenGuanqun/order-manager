@@ -11,17 +11,25 @@ import order.manager.constant.OrderConstants;
 import order.manager.dao.order.OrderInfo;
 import order.manager.dao.order.OrderInfoQuery;
 import order.manager.dao.order.OrderInfoService;
+import order.manager.dao.role.RoleInfo;
 import order.manager.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Calendar;
@@ -47,6 +55,61 @@ public class OrderInfoApi extends AbstractApi {
     public ApiResponse<Boolean> createOrder(@RequestBody OrderInfo orderInfo) throws ServiceException {
         boolean ret = orderInfoService.insert(orderInfo, getOperatorFromContext());
         return new ApiResponse<>(ret);
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<Boolean> uploadOrder(MultipartFile file) throws ServiceException, IOException {
+
+        List<OrderInfo> list = Lists.newArrayList();
+        POIFSFileSystem fs = new POIFSFileSystem(file.getInputStream());
+        HSSFWorkbook wb = new HSSFWorkbook(fs);
+        HSSFSheet sheet = wb.getSheetAt(0);
+        int rows = sheet.getPhysicalNumberOfRows();
+        if(rows <= 1) {
+            throw new ServiceException("没有数据");
+        }
+
+        for(int r = 1; r < rows; r++) {
+            HSSFRow row = sheet.getRow(r);
+            try{
+                if(row != null) {
+                    OrderInfo orderInfo = new OrderInfo();
+                    orderInfo.setCustomerName(row.getCell(0).getStringCellValue());
+                    orderInfo.setProductName(row.getCell(1).getStringCellValue());
+                    orderInfo.setProductSeries(row.getCell(2).getStringCellValue());
+                    orderInfo.setDescription(row.getCell(3).getStringCellValue());
+                    orderInfo.setNumber((long) row.getCell(4).getNumericCellValue());
+                    if(row.getCell(5) != null) {
+                        Date deDate = row.getCell(5).getDateCellValue();
+                        if(deDate !=null) {
+                            orderInfo.setDeliveryDate(deDate.getTime());
+                        }
+                    }
+
+                    if(row.getCell(6) == null || row.getCell(6).getDateCellValue() == null) {
+                        throw new ServiceException(String.format("第%s行错误，上传时必须确定订单日期，由此确定年度！"));
+                    }
+                    orderInfo.setOrderDate(row.getCell(6).getDateCellValue().getTime());
+                    if(row.getCell(7) != null) {
+                        Date planDate = row.getCell(7).getDateCellValue();
+                        if(planDate != null) {
+                            orderInfo.setPlanDate(planDate.getTime());
+                        }
+                    }
+
+                    list.add(orderInfo);
+                }
+            } catch (ServiceException e) {
+              throw e;
+            } catch (Exception e) {
+                String msg = String.format("第%s行发生错误，请检查格式再上传!msg:%s", r+1, e.getMessage());
+                throw new ServiceException(msg);
+            }
+
+        }
+        boolean isInsertSuccess = orderInfoService.insertBatch(list, getOperatorFromContext());
+        return new ApiResponse<>(isInsertSuccess);
     }
 
 

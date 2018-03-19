@@ -152,6 +152,26 @@
                 <el-button type="primary" @click="onSubmit">查询</el-button>
                 <el-button type="primary" @click="handleCreate">创建</el-button>
             </el-form-item>
+          <el-form-item>
+            <el-upload
+              class="upload-demo"
+              ref="upload"
+              action="/api/order/upload"
+              :multiple="false"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-success="handleResponse"
+              :file-list="fileList"
+              :on-error="handleUploadError"
+              accept=".xls"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传.xls文件，且按数据模板填写</div>
+            </el-upload>
+          </el-form-item>
         </el-form>
 
         <el-dialog title="订单进步操作" :visible.sync="dialogFormVisible" width='400px'>
@@ -421,7 +441,9 @@
                   config:false,
                   orderId:true,
                   operate:false
-                }
+                },
+              fileList: []
+
             }
         },
         created() {
@@ -665,7 +687,30 @@
                         // 处理请求错误的情况
                     })
                 }
-            }
+            },
+          submitUpload() {
+            console.log(this.fileList);
+            this.$refs.upload.submit();
+          },
+          handleRemove(file, fileList) {
+            console.log(file, fileList);
+          },
+          handleExceed(files, fileList) {
+            this.$message.warning(`只能选择1个文件，请先移除后再选择新文件！`);
+          },
+          handlePreview(file) {
+            console.log(file);
+          },
+          handleResponse(response, file, fileList){
+                if(response.code === 200 && response.result) {
+                    this.$message.success("上传成功！")
+                } else {
+                    this.$message.error("上传失败:" + response.msg);
+                }
+          },
+          handleUploadError(err, file, fileList){
+              this.$message.error("上传失败:" + err);
+          }
         }
     }
 </script>

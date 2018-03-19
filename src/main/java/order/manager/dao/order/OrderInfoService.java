@@ -2,6 +2,8 @@ package order.manager.dao.order;
 
 import order.manager.dao.customer.Customer;
 import order.manager.dao.customer.CustomerQuery;
+import order.manager.exception.ServiceException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
  * @version 2018/2/11
  */
 public interface OrderInfoService {
+
+    boolean insertBatch(List<OrderInfo> list, String operator) throws ServiceException;
 
     boolean insert(OrderInfo orderInfo, String operator);
 
