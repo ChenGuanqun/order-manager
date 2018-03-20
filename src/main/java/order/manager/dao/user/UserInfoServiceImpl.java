@@ -52,7 +52,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Override
     public boolean updateById(UserInfo userInfo, String operator) {
-        if(StringUtils.isNotEmpty(userInfo.getPassword())) {
+        if(StringUtils.isNotBlank(userInfo.getPassword())) {
             userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
         }
 

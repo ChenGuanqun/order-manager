@@ -306,6 +306,7 @@
             </el-table-column>
             <el-table-column
                     label="产品要求"
+                    v-if="access.productRequires"
             >
                 <template slot-scope="scope">
                     <el-tooltip :content="scope.row.description" placement="top">
@@ -443,7 +444,8 @@
                   deliveryStatus:false,
                   config:false,
                   orderId:true,
-                  operate:false
+                  operate:false,
+                  productRequires:false
                 },
               fileList: []
 
@@ -714,7 +716,8 @@
                 }
           },
           handleUploadError(err, file, fileList){
-              this.$message.error("上传失败:" + err);
+              console.info(err)
+              this.$message.error("上传失败,无法连接后台!");
           },
           beforeUpload(file) {
             let Xls = file.name.split('.');

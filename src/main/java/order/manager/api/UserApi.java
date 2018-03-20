@@ -9,7 +9,9 @@ import order.manager.dao.user.UserInfoQuery;
 import order.manager.dao.user.UserInfoService;
 import order.manager.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,8 @@ public class UserApi extends AbstractApi{
 
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
@@ -79,4 +83,20 @@ public class UserApi extends AbstractApi{
         return new ApiResponse<>(result);
     }
 
+
+    @RequestMapping(value = "/updatePwd", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResponse<Boolean> updateUser(@RequestBody PwdRequest request) throws ServiceException {
+        Validate.isTrue(StringUtils.isNotBlank(request.getNewPwd())
+                && StringUtils.isNotBlank(request.getNewAgain()) , "新密码不能为空!");
+        Validate.isTrue(StringUtils.equals(request.getNewPwd(), request.getNewAgain()), "两次输入密码不一致!");
+        UserInfo oldUser = userInfoService.getByName(getOperatorFromContext());
+        Validate.isTrue(oldUser != null, "找不到当前用户信息，联系管理员!");
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setPassword(request.getNewPwd());
+        userInfo.setId(oldUser.getId());
+        boolean ret = userInfoService.updateById(userInfo, getOperatorFromContext());
+        return new ApiResponse<>(ret);
+    }
 }

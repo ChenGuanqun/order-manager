@@ -60,6 +60,9 @@
             <if test="userName !=null and userName != ''">
                 AND UserName = #{userName}
             </if>
+            <if test="roleName !=null and roleName != ''">
+                AND RoleName = #{roleName}
+            </if>
         </where>
     </sql>
 

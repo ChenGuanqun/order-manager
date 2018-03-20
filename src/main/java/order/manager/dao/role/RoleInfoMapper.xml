@@ -4,14 +4,15 @@
 
     <sql id="RoleInfo_allFields">
         Id, ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate
+         Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate, UserRole, ProductRequires
     </sql>
 
     <insert id="insert" parameterType="RoleInfo">
      INSERT INTO role(ProductName, ProductSeries, Number, DeliveryDate, OrderDate, PlanDate, Status, CustomerName, Config,
-     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate)
+     Creator, InsertTime, LastOperator, LastModifyTime, Description, OrderId, DeliveryStatus, RoleName, Operate, UserRole, ProductRequires)
         VALUES(#{productName}, #{productSeries}, #{number}, #{deliveryDate}, #{orderDate}, #{planDate}, #{status}, #{customerName}, #{config},
-         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{deliveryStatus}, #{roleName}, #{operate})
+         #{creator}, #{insertTime}, #{lastOperator}, #{lastModifyTime}, #{description}, #{orderId}, #{deliveryStatus}, #{roleName}, #{operate},
+          #{userRole}, #{productRequires})
     </insert>
 
     <update id="updateById" parameterType="RoleInfo">
@@ -28,6 +29,8 @@
         Status = #{status},
         DeliveryStatus = #{deliveryStatus},
         Operate = #{operate},
+        UserRole = #{userRole},
+        ProductRequires = #{productRequires},
         <if test="roleName != null and roleName != ''">
             RoleName = #{roleName},
         </if>

@@ -4,7 +4,8 @@ import ajax from './index'
 export default {
     queryUsers(params) {
         return ajax.post('/api/user/query', {
-            userName: params.userName
+            userName: params.userName,
+            roleName: params.roleName
         })
     },
 
@@ -27,12 +28,22 @@ export default {
             id: params.id,
             status: params.status,
             roleName:params.roleName,
+            password:params.password,
             description: params.description
         })
     },
 
+  updatePwd(params) {
+    return ajax.post('/api/user/updatePwd', {
+      newPwd:params.newPwd,
+      newAgain: params.newAgain
+    })
+  },
     getCurrentUserName() {
         return ajax.post('/api/user/queryCurrentUserName')
+    },
+    getRole () {
+    return ajax.post('/api/role/getRole')
     },
     queryRoles () {
     return ajax.post('/api/role/query', {

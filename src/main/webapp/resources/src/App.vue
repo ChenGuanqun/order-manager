@@ -1,5 +1,23 @@
 <template>
     <el-container class="wrapper">
+      <el-dialog title="修改密码" :visible.sync="dialogFormVisible" width='400px'>
+        <el-form :model="form">
+          <el-form-item label="新密码" label-width='100px'>
+            <el-input v-model="form.newPwd" type="password"  auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+
+        <el-form :model="form">
+          <el-form-item label="确认新密码" label-width='100px'>
+            <el-input v-model="form.newAgain"  type="password" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="doOperate">确 定</el-button>
+        </div>
+      </el-dialog>
+
         <el-header class="header" height="80px">
             任务管理系统
 
@@ -11,6 +29,8 @@
                             <a href="/logout">
                                 <el-dropdown-item>退出</el-dropdown-item>
                             </a>
+                          <el-dropdown-item><span @click="dialogFormVisible=true">修改密码</span></el-dropdown-item>
+
                         </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -20,14 +40,14 @@
                     <router-link to="/orderProgress">
                         <el-menu-item index="1">订单进度</el-menu-item>
                     </router-link>
-                    <router-link to="/users">
+                    <router-link to="/users" v-if="accessUserRole">
                         <el-menu-item index="2">
                             用户管理
                         </el-menu-item>
                     </router-link>
-                  <router-link to="/roles">
+                  <router-link to="/roles" v-if="accessUserRole">
                     <el-menu-item index="3">
-                      权限管理
+                      角色管理
                     </el-menu-item>
                   </router-link>
                 </el-menu>
@@ -45,18 +65,76 @@
         name: 'App',
         data(){
             return {
-                currentUserName:'xxx'
+                currentUserName:'xxx',
+                accessUserRole:false,
+              dialogFormVisible:false,
+              form:{
+                newPwd:'',
+                newAgain:''
+              }
             }
         },
         created() {
+            this.$router.beforeEach((to, from, next) => {
+                if(to.path === '/roles' || to.path === '/users') {
+                    if(!this.accessUserRole){
+                      next("orderProgress")
+                    }else {
+                        next()
+                    }
+                } else {
+                    next()
+                }
+            })
+
             request.getCurrentUserName().then(res => {
                 if(res.data.code == 200) {
                     this.currentUserName = res.data.result
                 }
             }).catch(err => {
                 // 处理请求错误的情况
-            })
+            });
+
+          request.getRole().then(res => {
+            if(res.data.code == 200) {
+              this.accessUserRole = res.data.result.userRole
+            }
+          }).catch(err => {
+            // 处理请求错误的情况
+          });
+        },
+      methods:{
+        closeDialog() {
+          this.dialogFormVisible = false;
+          this.form={
+            newPwd:'',
+              newAgain:''
+          }
+        },
+        doOperate() {
+          request.updatePwd(this.form).then(res => {
+          if (res.data.code == 200 && res.data.result) {
+            this.$message({
+              message: '密码修改成功!',
+              type: 'success',
+              onClose: () => {
+                location.href = '/logout';
+              }
+            });
+
+          } else {
+            this.$message.error('密码修改失败!' + res.data.msg);
+          }
+        }).catch(err => {
+      // 处理请求错误的情况
+        })
+          this.dialogFormVisible = false;
+          this.form={
+            newPwd:'',
+              newAgain:''
+          }
         }
+      }
     }
 </script>
 

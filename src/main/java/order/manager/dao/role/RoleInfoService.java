@@ -14,7 +14,7 @@ public interface RoleInfoService {
 
     boolean insert(RoleInfo roleInfo, String operator) throws ServiceException;
 
-    boolean deleteById(long id);
+    boolean deleteById(long id) throws ServiceException;
 
     boolean updateById(RoleInfo roleInfo, String operator);
 

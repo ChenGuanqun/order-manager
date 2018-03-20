@@ -23,5 +23,6 @@ public class RoleInfo extends BaseBean {
     private boolean config;
     private boolean orderId;
     private boolean operate;
-
+    private boolean userRole;
+    private boolean productRequires;
 }

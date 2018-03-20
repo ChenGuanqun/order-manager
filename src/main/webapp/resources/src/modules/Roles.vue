@@ -3,7 +3,7 @@
 
       <el-form :inline="true"  class="demo-form-inline">
         <el-form-item>
-          <el-button type="primary" @click="handleCreate">创建权限</el-button>
+          <el-button type="primary" @click="handleCreate">创建角色</el-button>
         </el-form-item>
       </el-form>
 
@@ -38,6 +38,12 @@
             v-model="form.productSeries"
             :width='40'
             active-text="产品型号"
+          >
+          </el-switch>
+          <el-switch
+            v-model="form.productRequires"
+            :width='40'
+            active-text="产品要求"
           >
           </el-switch>
           <el-switch
@@ -88,6 +94,14 @@
             active-text="操作"
           >
           </el-switch>
+          <el-switch
+            v-model="form.userRole"
+            :width='40'
+            active-text="用户权限"
+          >
+          </el-switch>
+
+
         </el-form>
 
         <el-form :model="form">
@@ -157,7 +171,9 @@
                 deliveryStatus:false,
                 config:false,
                 orderId:false,
-                operate:false
+                operate:false,
+                userRole:false,
+                productRequires:false
               },
               isEdit:false
             };
@@ -191,7 +207,9 @@
               deliveryStatus:false,
               config:false,
               orderId:false,
-              operate:false
+              operate:false,
+              userRole:false,
+              productRequires:false
             }
             this.dialogFormVisible = true;
             this.isEdit = false;
@@ -246,7 +264,8 @@
             this.form.config = this.$_currentEditRole.config;
             this.form.orderId = this.$_currentEditRole.orderId;
             this.form.operate = this.$_currentEditRole.operate;
-
+            this.form.userRole = this.$_currentEditRole.userRole;
+            this.form.productRequires = this.$_currentEditRole.productRequires;
 
             this.form.description = this.$_currentEditRole.description;
             this.dialogFormVisible = true ;
@@ -261,7 +280,7 @@
                 });
                 this.fetchAllRoles();
               } else {
-                this.$message.error('删除权限:"' + row.roleName+ '"失败!');
+                this.$message.error('删除权限:"' + row.roleName+ '"失败!' + res.data.msg);
               }
             }).catch(err => {
               // 处理请求错误的情况

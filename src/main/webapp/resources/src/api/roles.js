@@ -23,7 +23,9 @@ export default {
       status:params.status,
       deliveryStatus:params.deliveryStatus,
       operate:params.operate,
-      description:params.description
+      description:params.description,
+      userRole:params.userRole,
+      productRequires:params.productRequires
     })
   },
   updateRole(params) {
@@ -43,7 +45,10 @@ export default {
       status:params.status,
       deliveryStatus:params.deliveryStatus,
       operate:params.operate,
-      description:params.description
+      description:params.description,
+      userRole:params.userRole,
+      productRequires:params.productRequires
+
     })
   },
   deleteRole(params) {
