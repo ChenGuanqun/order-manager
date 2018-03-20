@@ -170,7 +170,9 @@
               :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
               <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传.xls文件，且按数据模板填写</div>
+              <div slot="tip" class="el-upload__tip">
+                只能上传.xls文件，<a href="/api/order/getTemplate">下载Excel模板</a>
+              </div>
             </el-upload>
           </el-form-item>
         </el-form>
@@ -703,9 +705,12 @@
           },
           handleResponse(response, file, fileList){
                 if(response.code === 200 && response.result) {
-                    this.$message.success("上传成功！")
+                    this.$message.success("上传成功！");
+                    this.fetchAllOrders({pageNum:1});
+                    this.$refs.upload.clearFiles();
                 } else {
                     this.$message.error("上传失败:" + response.msg);
+                  this.$refs.upload.clearFiles();
                 }
           },
           handleUploadError(err, file, fileList){
