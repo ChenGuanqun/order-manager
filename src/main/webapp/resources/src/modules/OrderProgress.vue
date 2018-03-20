@@ -160,6 +160,7 @@
               :multiple="false"
               :limit="1"
               :on-exceed="handleExceed"
+              :before-upload="beforeUpload"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :on-success="handleResponse"
@@ -689,17 +690,16 @@
                 }
             },
           submitUpload() {
-            console.log(this.fileList);
             this.$refs.upload.submit();
           },
           handleRemove(file, fileList) {
-            console.log(file, fileList);
+//            console.log(file, fileList);
           },
           handleExceed(files, fileList) {
             this.$message.warning(`只能选择1个文件，请先移除后再选择新文件！`);
           },
           handlePreview(file) {
-            console.log(file);
+//            console.log(file);
           },
           handleResponse(response, file, fileList){
                 if(response.code === 200 && response.result) {
@@ -710,6 +710,15 @@
           },
           handleUploadError(err, file, fileList){
               this.$message.error("上传失败:" + err);
+          },
+          beforeUpload(file) {
+            let Xls = file.name.split('.');
+            if(Xls[1] === 'xls'){
+              return file
+            }else {
+              this.$message.error('上传文件只能是 xls 格式!')
+              return false
+            }
           }
         }
     }
